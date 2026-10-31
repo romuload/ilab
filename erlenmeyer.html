@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0B4A31">
+<title>iLab · Laboratório livre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="logo.js"></script>
+<style>
+/* Área de testes: o Erlenmeyer 3D original, com palco à esquerda e controles à direita; empilha no celular */
+:root{
+  --bg:#F4F6F5; --stage:#FAFBFA; --panel:#FFFFFF; --hover:#EBF0ED; --ink:#16201B; --muted:#5F6B65; --line:#E1E6E3; --line-strong:#C5CEC9;
+  --brand:#0A7A4A; --brand-hover:#086640; --on-brand:#FFFFFF; --amber:#C8700F;
+  --mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1311; --stage:#151C19; --panel:#151C19; --hover:#1F2925; --ink:#E6ECE8; --muted:#97A39E; --line:#25302B; --line-strong:#34413B;
+  --brand:#3BBF7C; --brand-hover:#56CF90; --on-brand:#06170E; --amber:#F0A245; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1311; --stage:#151C19; --panel:#151C19; --hover:#1F2925; --ink:#E6ECE8; --muted:#97A39E; --line:#25302B; --line-strong:#34413B;
+  --brand:#3BBF7C; --brand-hover:#56CF90; --on-brand:#06170E; --amber:#F0A245; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font:14px/20px Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
+.top{height:60px;display:flex;align-items:center;gap:16px;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left));background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;color:var(--ink);text-decoration:none;padding:4px 14px 4px 0;border-right:1px solid var(--line)}
+.brand ilab-logo{font-size:26px}
+.ttl b{display:block;font-size:16px;line-height:20px;white-space:nowrap}
+.ttl span{font-size:12px;color:var(--muted)}
+.sp{flex:1}
+.lnk{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--line-strong);background:var(--panel);color:var(--ink);font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap}
+.lnk:hover{background:var(--hover)}
+
+.wrap{max-width:1240px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-right)) 28px max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:16px}
+.lab{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:stretch}
+.stage{position:relative;min-width:0;height:min(76vh,700px);min-height:420px;background:var(--stage);border:1px solid var(--line);border-radius:14px;overflow:hidden;touch-action:none}
+.stage canvas{display:block;width:100%;height:100%;cursor:grab}
+.stage canvas:active{cursor:grabbing}
+.readout{position:absolute;left:16px;bottom:14px;display:flex;flex-direction:column;font-family:var(--mono);pointer-events:none}
+.readout b{font-size:30px;line-height:34px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.readout span{font-size:12px;color:var(--muted)}
+.hint{position:absolute;right:14px;top:12px;font-size:12px;color:var(--muted);pointer-events:none}
+.loading[hidden]{display:none}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:13px}
+
+.bench{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:22px;min-width:0}
+.group{display:flex;flex-direction:column;gap:10px}
+.label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.label output,.sw-name{color:var(--ink);font-variant-numeric:tabular-nums;text-transform:none;letter-spacing:0;font-size:13px}
+input[type=range]{width:100%;accent-color:var(--brand);height:28px;margin:0}
+.scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:-6px}
+.swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sw{appearance:none;border:1px solid var(--line);background:transparent;border-radius:10px;padding:7px 0 6px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:var(--muted);font:500 10.5px/1.1 Inter,sans-serif}
+.sw i{display:block;width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.sw[aria-pressed="true"]{border-color:var(--brand);color:var(--ink);box-shadow:0 0 0 1px var(--brand)}
+.sw-desc{font-size:12.5px;line-height:17px;color:var(--muted);margin:0}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.btn{appearance:none;font-weight:600;font-size:13.5px;line-height:1;padding:11px 14px;border-radius:10px;border:1px solid var(--line-strong);background:transparent;color:var(--ink);cursor:pointer;flex:1 1 auto}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.btn.primary:hover{background:var(--brand-hover)}
+.btn[aria-pressed="true"]:not(.primary){border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+.note{font-size:12.5px;line-height:18px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin:auto 0 0}
+
+@media (max-width:820px){
+  .lab{grid-template-columns:minmax(0,1fr)}
+  .stage{height:58vh;min-height:340px}
+  .hint{display:none}
+}
+@media (max-width:560px){.ttl span,.lnk.hide-sm{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="index.html#/inicio" title="Minhas consultas"><ilab-logo></ilab-logo></a>
+  <div class="ttl"><b>Laboratório livre</b><span>Área de testes · brinque com o Erlenmeyer</span></div>
+  <span class="sp"></span>
+  <a class="lnk hide-sm" href="index.html#/inicio">Minhas consultas</a>
+  <a class="lnk" href="bancada.html">Bancada 3D</a>
+</header>
+
+<main class="wrap">
+  <div class="lab">
+    <div class="stage" id="stage">
+      <div class="loading" id="loading">Carregando o modelo…</div>
+      <div class="hint">Arraste para girar · role ou use dois dedos para aproximar</div>
+      <div class="readout" aria-live="polite"><b id="vol">130 mL</b><span id="pct">52% do volume nominal</span></div>
+    </div>
+
+    <aside class="bench" aria-label="Controles do frasco">
+      <div class="group">
+        <label class="label" for="level">Volume do líquido <output id="levelOut">130 mL</output></label>
+        <input type="range" id="level" min="10" max="250" step="5" value="130">
+        <div class="scale"><span>10</span><span>90</span><span>170</span><span>250 mL</span></div>
+      </div>
+
+      <div class="group">
+        <div class="label">Líquido <span class="sw-name" id="swName">Gasolina C</span></div>
+        <div class="swatches" id="swatches" role="group" aria-label="Líquido no frasco"></div>
+        <p class="sw-desc" id="swDesc"></p>
+      </div>
+
+      <div class="group">
+        <div class="label">Bastão de vidro</div>
+        <div class="row">
+          <button class="btn primary" id="stir" aria-pressed="false">Agitar</button>
+          <button class="btn" id="rodToggle" aria-pressed="true">Ocultar bastão</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="label">Vista</div>
+        <div class="row">
+          <button class="btn" id="spin" aria-pressed="true">Giro automático</button>
+          <button class="btn" id="reset">Centralizar</button>
+        </div>
+      </div>
+
+      <p class="note">Frasco de Erlenmeyer de 250 mL com parede de vidro de espessura real e menisco na superfície. As cores são ilustrativas: servem para brincar, não para identificar amostras.</p>
+    </aside>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+const stage = document.getElementById('stage');
+if(!window.THREE){ document.getElementById('loading').textContent='Não foi possível carregar o 3D. Verifique a conexão com a internet.'; return; }
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- geometria (mesmo perfil do Blender e da Bancada 3D) ---------- */
+function fillet(pts, radii, seg){
+  seg = seg||12; const out=[];
+  for(let i=0;i<pts.length;i++){
+    const r=radii[i], P=pts[i];
+    if(r<=0||i===0||i===pts.length-1){ out.push([P[0],P[1]]); continue; }
+    const A=pts[i-1], B=pts[i+1];
+    let ux=A[0]-P[0], uy=A[1]-P[1], ul=Math.hypot(ux,uy); ux/=ul; uy/=ul;
+    let vx=B[0]-P[0], vy=B[1]-P[1], vl=Math.hypot(vx,vy); vx/=vl; vy/=vl;
+    const th=Math.acos(Math.max(-1,Math.min(1,ux*vx+uy*vy)))/2;
+    const d=r/Math.tan(th);
+    const T1=[P[0]+ux*d,P[1]+uy*d], T2=[P[0]+vx*d,P[1]+vy*d];
+    let bx=ux+vx, by=uy+vy, bl=Math.hypot(bx,by); bx/=bl; by/=bl;
+    const C=[P[0]+bx*r/Math.sin(th), P[1]+by*r/Math.sin(th)];
+    const a1=Math.atan2(T1[1]-C[1],T1[0]-C[0]), a2=Math.atan2(T2[1]-C[1],T2[0]-C[0]);
+    let da=a2-a1; while(da>Math.PI)da-=2*Math.PI; while(da<-Math.PI)da+=2*Math.PI;
+    for(let k=0;k<=seg;k++){ const a=a1+da*k/seg; out.push([C[0]+r*Math.cos(a), C[1]+r*Math.sin(a)]); }
+  }
+  return out;
+}
+const T=0.035, BT=0.05, NI=0.30-T;
+const oa=[1.0,0], ob=[0.30,1.62];
+let dx=ob[0]-oa[0], dy=ob[1]-oa[1]; const dl=Math.hypot(dx,dy); dx/=dl; dy/=dl;
+let nx=dy, ny=-dx; if(nx<0){nx=-nx;ny=-ny;}
+const pa=[oa[0]-nx*T, oa[1]-ny*T];
+const xB = pa[0]+dx*((BT-pa[1])/dy);
+const zN = pa[1]+dy*((NI-pa[0])/dx);
+
+const glassProfile = fillet(
+  [[0,0],[1.0,0],[0.30,1.62],[0.30,2.21],[0.352,2.245],[0.352,2.33],[NI,2.33],[NI,zN],[xB,BT],[0,BT]],
+  [0,0.14,0.20,0.015,0.02,0.022,0.008,0.165,0.105,0]);
+const inner = fillet([[0,BT],[xB,BT],[NI,zN],[NI,2.33]],[0,0.105,0.165,0],16);
+
+function rAt(z){
+  for(let i=0;i<inner.length-1;i++){
+    const a=inner[i], b=inner[i+1];
+    if(b[1]>a[1] && z>=a[1] && z<=b[1]){ const t=(z-a[1])/(b[1]-a[1]); return a[0]+(b[0]-a[0])*t; }
+  }
+  return z<BT+0.05 ? xB : NI;
+}
+// volume integrando πr² e escalado para que 250 mL fique no início do gargalo (o volume nominal)
+function vol(H){ let v=0; const s=0.002; for(let z=BT; z<H; z+=s){ const r=rAt(z+s/2); v+=Math.PI*r*r*s; } return v; }
+const K = 250/vol(zN);
+function hFromMl(ml){ let lo=BT+0.005, hi=2.2; for(let i=0;i<40;i++){ const m=(lo+hi)/2; (K*vol(m)<ml)?lo=m:hi=m; } return (lo+hi)/2; }
+
+const MEN=0.022, G=0.003;
+function liquidPoints(H, vort){
+  const pts=[];
+  for(let i=0;i<inner.length;i++){
+    const r=inner[i][0], z=inner[i][1];
+    if(z < H+MEN){ pts.push([r>0?r-G:0, z+G]); }
+    else{
+      const p=inner[i-1], t=(H+MEN-p[1])/(z-p[1]);
+      pts.push([p[0]+(r-p[0])*t-G, H+MEN]); break;
+    }
+  }
+  const rh=pts[pts.length-1][0];
+  vort=Math.min(vort, (H-BT)*0.6);
+  for(let k=1;k<=24;k++){
+    const f=k/24;
+    const men=MEN*Math.pow(Math.max(0,1-f/0.3),2.2);
+    pts.push([Math.max(0,rh*(1-f)), H+men-vort*Math.pow(f,2.4)]);
+  }
+  return pts.map(p=>new THREE.Vector2(p[0],p[1]));
+}
+
+/* ---------- renderer, cena, câmera ---------- */
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+stage.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 100);
+const HOME = new THREE.Vector3(0.6, 2.0, 8.2), TARGET = new THREE.Vector3(0, 1.25, 0);
+camera.position.copy(HOME);
+
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.target.copy(TARGET);
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.minDistance = 3.6; controls.maxDistance = 13;
+controls.maxPolarAngle = 1.62; controls.enablePan = false;
+controls.autoRotate = !reduce; controls.autoRotateSpeed = 0.9;
+controls.update();
+
+/* ---------- shaders ---------- */
+const VERT = `
+varying vec3 vN; varying vec3 vP; varying vec3 vW;
+void main(){
+  vec4 mv = modelViewMatrix * vec4(position,1.0);
+  vP = mv.xyz; vN = normalMatrix * normal; vW = mat3(modelMatrix) * normal;
+  gl_Position = projectionMatrix * mv;
+}`;
+const HIGHLIGHTS = `
+float streaks(vec3 n){
+  float h1 = smoothstep(0.40,0.47,n.x)*(1.0-smoothstep(0.55,0.63,n.x));
+  float h2 = smoothstep(-0.80,-0.73,n.x)*(1.0-smoothstep(-0.66,-0.60,n.x));
+  float h3 = smoothstep(0.12,0.16,n.x)*(1.0-smoothstep(0.18,0.22,n.x))*0.35;
+  return h1 + h2*0.6 + h3;
+}`;
+const GLASS_FRAG = `
+uniform vec3 uEdge; uniform float uMin; uniform float uMax; uniform float uHl;
+varying vec3 vN; varying vec3 vP; varying vec3 vW;
+${HIGHLIGHTS}
+void main(){
+  vec3 n = normalize(vN); if(!gl_FrontFacing) n = -n;
+  vec3 v = normalize(-vP);
+  float f = pow(1.0 - abs(dot(n,v)), 2.6);
+  float a = mix(uMin, uMax, f);
+  float flat_ = smoothstep(0.85, 0.98, abs(normalize(vW).y));
+  a *= mix(1.0, 0.12, flat_);
+  float h = streaks(n) * uHl * (1.0 - flat_);
+  gl_FragColor = vec4(uEdge*a + vec3(h), clamp(a + h*0.6, 0.0, 1.0));
+}`;
+const LIQ_FRAG = `
+uniform vec3 uLight; uniform vec3 uDeep; uniform float uAMin; uniform float uAMax;
+varying vec3 vN; varying vec3 vP; varying vec3 vW;
+${HIGHLIGHTS}
+void main(){
+  vec3 n = normalize(vN); if(!gl_FrontFacing) n = -n;
+  vec3 v = normalize(-vP);
+  float ndv = abs(dot(n,v));
+  vec3 col = mix(uDeep, uLight, pow(ndv, 1.4));
+  float top = smoothstep(0.55, 0.9, normalize(vW).y);
+  col = mix(col, uLight*1.08 + 0.06, top*0.75);
+  col += vec3(streaks(n))*0.14;
+  float a = mix(uAMax, uAMin, ndv);
+  a = mix(a, uAMin*0.85, top);
+  gl_FragColor = vec4(col*a, a);
+}`;
+function glassMat(side, edge, aMin, aMax, hl){
+  return new THREE.ShaderMaterial({
+    vertexShader:VERT, fragmentShader:GLASS_FRAG, side, transparent:true, depthWrite:false,
+    blending:THREE.CustomBlending, blendSrc:THREE.OneFactor, blendDst:THREE.OneMinusSrcAlphaFactor,
+    uniforms:{uEdge:{value:new THREE.Color(edge)}, uMin:{value:aMin}, uMax:{value:aMax}, uHl:{value:hl}}
+  });
+}
+
+const glassGeo = new THREE.LatheGeometry(glassProfile.map(p=>new THREE.Vector2(p[0],p[1])), 128);
+const glassBack  = new THREE.Mesh(glassGeo, glassMat(THREE.BackSide,  0x3d4850, 0.02, 0.32, 0.45));
+const glassFront = new THREE.Mesh(glassGeo, glassMat(THREE.FrontSide, 0x3d4850, 0.03, 0.48, 0.85));
+glassBack.renderOrder = 0; glassFront.renderOrder = 3;
+scene.add(glassBack, glassFront);
+
+// líquidos do dia a dia do laboratório; as cores são aproximadas
+const SOLUTIONS = [
+  {name:'Gasolina C', short:'Gasolina', chip:'#f2b233', light:0xffd36a, deep:0xd98a1a, a:[0.62,0.92], d:'Combustível amarelado, como as amostras da Bancada 3D.'},
+  {name:'Óleo diesel S10', short:'Diesel', chip:'#e8d68a', light:0xfff6c4, deep:0xdcc160, a:[0.40,0.80], d:'Amarelo-claro. O S10 não leva corante.'},
+  {name:'Água', short:'Água', chip:'#cfe6ee', light:0xeef8fb, deep:0x9fc4d1, a:[0.18,0.55], d:'Água destilada, quase transparente.'},
+  {name:'Azul de metileno', short:'Metileno', chip:'#2a62d4', light:0x5b9bff, deep:0x0f2c8f, a:[0.80,0.97], d:'Corante azul muito usado como indicador.'},
+  {name:'Permanganato de potássio', short:'KMnO₄', chip:'#7a1fa6', light:0xbd6cf0, deep:0x43085f, a:[0.82,0.97], d:'Solução violeta intensa, usada em titulações.'}
+];
+const liquidMat = new THREE.ShaderMaterial({
+  vertexShader:VERT, fragmentShader:LIQ_FRAG, side:THREE.FrontSide, transparent:true, depthWrite:false,
+  blending:THREE.CustomBlending, blendSrc:THREE.OneFactor, blendDst:THREE.OneMinusSrcAlphaFactor,
+  uniforms:{uLight:{value:new THREE.Color()}, uDeep:{value:new THREE.Color()}, uAMin:{value:0}, uAMax:{value:0}}
+});
+let H = hFromMl(130), vort = 0, vortTarget = 0;
+const liquid = new THREE.Mesh(new THREE.LatheGeometry(liquidPoints(H,0), 128), liquidMat);
+liquid.renderOrder = 2;
+scene.add(liquid);
+function rebuildLiquid(){ liquid.geometry.dispose(); liquid.geometry = new THREE.LatheGeometry(liquidPoints(H,vort), 128); }
+
+/* bastão de vidro: passa pelo gargalo sem encostar, então pode girar em torno do eixo */
+const top = new THREE.Vector3(-0.34,2.95,0.04), bot = new THREE.Vector3(0.30,0.16,-0.03);
+const rr = 0.032, len = top.distanceTo(bot);
+const rodGeo = new THREE.CapsuleGeometry(rr, len, 8, 32);
+const rodGroup = new THREE.Group();
+const rodMat = glassMat(THREE.FrontSide, 0x3d4850, 0.10, 0.75, 1.0);
+const rod = new THREE.Mesh(rodGeo, rodMat);
+rod.renderOrder = 1;
+rod.position.copy(top).add(bot).multiplyScalar(0.5);
+rod.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), top.clone().sub(bot).normalize());
+rodGroup.add(rod);
+scene.add(rodGroup);
+
+/* sombra de contato */
+const sc = document.createElement('canvas'); sc.width = sc.height = 256;
+const g = sc.getContext('2d'), grd = g.createRadialGradient(128,128,10,128,128,128);
+grd.addColorStop(0,'rgba(0,0,0,0.45)'); grd.addColorStop(0.55,'rgba(0,0,0,0.16)'); grd.addColorStop(1,'rgba(0,0,0,0)');
+g.fillStyle = grd; g.fillRect(0,0,256,256);
+const shadow = new THREE.Mesh(new THREE.PlaneGeometry(2.9,2.9), new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(sc), transparent:true, depthWrite:false}));
+shadow.rotation.x = -Math.PI/2; shadow.position.y = 0.002; shadow.renderOrder = -1;
+scene.add(shadow);
+
+/* ---------- tema ---------- */
+function applyTheme(){
+  const c = getComputedStyle(document.documentElement).getPropertyValue('--stage').trim() || '#FAFBFA';
+  scene.background = new THREE.Color(c);
+  const dark = scene.background.getHSL({}).l < 0.4;
+  shadow.material.opacity = dark ? 0.9 : 0.75;
+  const edge = dark ? 0xb9c4c9 : 0x3d4850;
+  [glassBack, glassFront, rod].forEach(m=>m.material.uniforms.uEdge.value.setHex(edge));
+}
+applyTheme();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+new MutationObserver(applyTheme).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+
+/* ---------- tamanho ---------- */
+function resize(){
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w,h,false); camera.aspect = w/h;
+  camera.fov = w/h < 0.8 ? 36 : 28;
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(stage); resize();
+
+/* ---------- controles da página ---------- */
+const level = document.getElementById('level'), levelOut = document.getElementById('levelOut');
+const volEl = document.getElementById('vol'), pctEl = document.getElementById('pct');
+function setLevel(ml){
+  H = hFromMl(ml); rebuildLiquid();
+  levelOut.textContent = volEl.textContent = ml + ' mL';
+  pctEl.textContent = Math.round(ml/250*100) + '% do volume nominal';
+}
+level.addEventListener('input', ()=>setLevel(+level.value));
+
+const swWrap = document.getElementById('swatches'), swName = document.getElementById('swName'), swDesc = document.getElementById('swDesc');
+function pick(s, b){
+  swWrap.querySelectorAll('.sw').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true'); swName.textContent = s.name; swDesc.textContent = s.d;
+  const u = liquidMat.uniforms; u.uLight.value.setHex(s.light); u.uDeep.value.setHex(s.deep); u.uAMin.value = s.a[0]; u.uAMax.value = s.a[1];
+}
+SOLUTIONS.forEach((s,i)=>{
+  const b = document.createElement('button');
+  b.className='sw'; b.type='button'; b.setAttribute('aria-pressed', 'false');
+  b.setAttribute('aria-label', s.name); b.title = s.name;
+  b.innerHTML = '<i style="background:'+s.chip+'"></i>' + s.short;
+  b.addEventListener('click', ()=>pick(s, b));
+  swWrap.appendChild(b);
+  if(i===0) pick(s, b);
+});
+
+let stirring = false;
+const stirBtn = document.getElementById('stir'), rodToggle = document.getElementById('rodToggle');
+stirBtn.addEventListener('click', ()=>{
+  stirring = !stirring; vortTarget = stirring ? 0.16 : 0;
+  stirBtn.setAttribute('aria-pressed', stirring); stirBtn.textContent = stirring ? 'Parar' : 'Agitar';
+  if(stirring && !rodGroup.visible) rodToggle.click();
+});
+rodToggle.addEventListener('click', ()=>{
+  rodGroup.visible = !rodGroup.visible;
+  rodToggle.setAttribute('aria-pressed', rodGroup.visible);
+  rodToggle.textContent = rodGroup.visible ? 'Ocultar bastão' : 'Mostrar bastão';
+  if(!rodGroup.visible && stirring) stirBtn.click();
+});
+const spin = document.getElementById('spin');
+spin.setAttribute('aria-pressed', controls.autoRotate);
+spin.addEventListener('click', ()=>{ controls.autoRotate = !controls.autoRotate; spin.setAttribute('aria-pressed', controls.autoRotate); });
+document.getElementById('reset').addEventListener('click', ()=>{ camera.position.copy(HOME); controls.target.copy(TARGET); controls.update(); });
+
+/* ---------- loop ---------- */
+const clock = new THREE.Clock();
+document.getElementById('loading').hidden = true;
+renderer.setAnimationLoop(()=>{
+  const dt = Math.min(clock.getDelta(), 0.05);
+  if(stirring) rodGroup.rotation.y -= dt*4.2;
+  const nv = vort + (vortTarget - vort)*Math.min(1, dt*2.5);
+  if(Math.abs(nv - vort) > 1e-4){ vort = nv; rebuildLiquid(); }
+  controls.update();
+  renderer.render(scene, camera);
+});
+})();
+</script>
+</body>
+</html>
