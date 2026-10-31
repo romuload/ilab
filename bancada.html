@@ -6,7 +6,16 @@
 <title>iLab · Bancada 3D</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="logo.js"></script>
+<script>
+// abertura: uma vez por sessão; ?intro=1 força e ?intro=0 pula
+(() => {
+  const q = new URLSearchParams(location.search).get('intro');
+  let visto = false; try { visto = !!sessionStorage.getItem('ilab-intro'); } catch (e) { }
+  if (q === '1' || (q !== '0' && !visto)) document.documentElement.classList.add('intro-on');
+})();
+</script>
 <style>
 :root{
   --bg:#F4F6F5; --surface:#FFFFFF; --surface-2:#F0F3F1; --hover:#EBF0ED;
@@ -43,6 +52,8 @@ p{margin:0}
 .top{height:60px;flex:none;display:flex;align-items:center;gap:16px;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--border)}
 .back{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 10px;border-radius:8px;color:var(--fg-2);text-decoration:none;font-weight:500}
 .back:hover{background:var(--hover);color:var(--fg)}
+.brand{display:flex;align-items:center;color:var(--fg);text-decoration:none;padding:4px 14px 4px 0;border-right:1px solid var(--border)}
+.brand ilab-logo{font-size:26px}
 .ttl b{display:block;font-size:16px;line-height:20px}
 .ttl span{font-size:12px;color:var(--fg-3)}
 .sp{flex:1}
@@ -137,10 +148,42 @@ button.pill:hover{background:#fff;transform:translateX(-2px)}
 .linkbtn{border:0;background:none;padding:0;color:var(--brand);font-weight:600;cursor:pointer;text-decoration:underline}
 .live{min-height:0}
 .si{display:block;flex:none}
+
+/* ---- abertura (≤ 5 s) ---- */
+.intro{display:none}
+.intro-on .intro{display:block;position:fixed;inset:0;z-index:100;background:#050d0a;color:#E6ECE8;overflow:hidden;cursor:pointer;user-select:none}
+.intro canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.in-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 42%,rgba(0,0,0,.6) 100%)}
+.in-grain{position:absolute;inset:-60px;pointer-events:none;opacity:.08;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");animation:grain .5s steps(3) infinite}
+@keyframes grain{0%{transform:translate(0,0)}33%{transform:translate(-31px,17px)}66%{transform:translate(23px,-29px)}}
+.in-words{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.tk{position:absolute;left:0;top:0;white-space:nowrap;opacity:0;will-change:transform,opacity}
+.tk-t{font:600 14px/1 Inter,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#a6cbb9}
+.tk-n{font:500 30px/1 "JetBrains Mono",ui-monospace,Consolas,monospace;color:#FFC14D;letter-spacing:-.02em;text-shadow:0 0 18px rgba(255,170,40,.35)}
+.tk-m{font:500 13px/1 "JetBrains Mono",ui-monospace,Consolas,monospace;color:#E6ECE8;border:1px solid rgba(230,236,232,.32);padding:6px 9px;border-radius:4px;letter-spacing:.04em}
+.in-bar{position:absolute;left:0;right:0;height:max(9vh,46px);background:#000;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,32px);font:500 11px/1 "JetBrains Mono",ui-monospace,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase;color:#6f8a7d;transition:transform .75s cubic-bezier(.7,0,.2,1)}
+.in-bar.top{top:0}.in-bar.bot{bottom:0}
+.in-bar b{color:#d8e4de;font-weight:500}
+.intro.out .in-bar.top{transform:translateY(-100%)}.intro.out .in-bar.bot{transform:translateY(100%)}
+.in-skip{font:inherit;letter-spacing:inherit;text-transform:inherit;color:#d8e4de;background:none;border:1px solid rgba(216,228,222,.3);border-radius:999px;height:30px;padding:0 14px;cursor:pointer}
+.in-skip:hover{background:rgba(255,255,255,.08)}
+.in-brand{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;pointer-events:none;transition:transform .7s cubic-bezier(.5,0,.2,1),opacity .5s}
+.in-brand ilab-logo{font-size:clamp(68px,14vw,140px);color:#F2F6F3}
+.in-brand ilab-logo>span{opacity:0;filter:blur(14px);transform:translateX(-.3em);transition:opacity .45s,filter .6s,transform .75s cubic-bezier(.16,.9,.2,1)}
+.in-brand ilab-logo>span:last-child{transform:translateX(.3em)}
+.in-brand ilab-logo .lg-a{opacity:0;transition:opacity .3s}
+.in-brand.on ilab-logo>span{opacity:1;filter:blur(0);transform:none}
+.in-brand.on ilab-logo>span:nth-child(2){transition-delay:.05s}
+.in-brand.on ilab-logo>span:last-child{transition-delay:.1s}
+.in-brand.a ilab-logo .lg-a{opacity:1}
+.in-brand p{margin:0;font:500 clamp(11px,1.4vw,14px)/1 Inter,sans-serif;letter-spacing:.6em;text-transform:uppercase;color:#9fb5aa;opacity:0;transition:opacity .6s .25s,letter-spacing 1.4s .2s cubic-bezier(.16,.9,.2,1)}
+.in-brand.on p{opacity:1;letter-spacing:.3em}
+.intro.out .in-brand{transform:scale(1.08);opacity:0}
+@media (prefers-reduced-motion:reduce){.in-grain{animation:none}}
 @media (max-width:900px){
   .lab{grid-template-columns:1fr;grid-template-rows:62vh auto}
   .panel{border-left:0;border-top:1px solid var(--border)}
-  .top .seg{display:none}
+  .top .seg,.top .hide-sm{display:none}
   .legend{width:auto;right:14px}
 }
 @media (max-width:520px){.ttl span{display:none}.hud .label{display:none}.crumb{right:110px}.crumb .esc{display:none}.lab{grid-template-rows:48vh auto}}
@@ -152,11 +195,20 @@ button.pill:hover{background:#fff;transform:translateX(-2px)}
   <clipPath id="clip-flask"><path d="M12.5 4h7v8.2l7.6 13.2A2.4 2.4 0 0 1 25 29H7a2.4 2.4 0 0 1-2.1-3.6l7.6-13.2z"/></clipPath>
   <clipPath id="clip-bottle"><path d="M12.5 6h7v2.5l2.6 1.5a2.5 2.5 0 0 1 1.4 2.2v14.3a2.5 2.5 0 0 1-2.5 2.5H11a2.5 2.5 0 0 1-2.5-2.5V12.2a2.5 2.5 0 0 1 1.4-2.2l2.6-1.5z"/></clipPath>
 </defs></svg>
+<div class="intro" id="intro" aria-hidden="true">
+  <canvas></canvas>
+  <div class="in-words"></div>
+  <div class="in-brand"><ilab-logo></ilab-logo><p>Laboratório inteligente</p></div>
+  <div class="in-vig"></div><div class="in-grain"></div>
+  <div class="in-bar top"><span><b>iLAB</b> · Lab 275 · RECAP</span><button class="in-skip" type="button">Pular</button></div>
+  <div class="in-bar bot"><span id="inCount">00 amostras · 00 ensaios</span><span id="inTc">00:00:00</span></div>
+</div>
 <header class="top">
-  <a class="back" href="index.html#/inicio"><svg class="ic" viewBox="0 0 24 24"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg>iLab</a>
+  <a class="brand" href="index.html#/inicio" title="Minhas consultas"><ilab-logo aria-label="iLAB"></ilab-logo></a>
   <div class="ttl"><b>Bancada 3D</b><span>Laboratório 275 · RECAP · amostras de hoje</span></div>
   <span class="sp"></span>
   <div class="seg" id="filters" role="group" aria-label="Destacar amostras"></div>
+  <a class="btn btn-sm hide-sm" href="index.html#/consultas">Minhas consultas</a>
   <a class="btn btn-sm" href="index.html#/status">Guia de status</a>
 </header>
 <main class="lab">
@@ -173,7 +225,9 @@ button.pill:hover{background:#fff;transform:translateX(-2px)}
 </main>
 
 <script>
-window.addEventListener('error', e => { const l = document.getElementById('loading'); if (l && !l.hidden) l.textContent = 'Não foi possível carregar o 3D. Verifique a conexão com a internet.'; });
+window.addEventListener('error', e => { document.documentElement.classList.remove('intro-on'); const l = document.getElementById('loading'); if (l && !l.hidden) l.textContent = 'Não foi possível carregar o 3D. Verifique a conexão com a internet.'; });
+// se o 3D não começar a tempo, a abertura sai do caminho
+setTimeout(() => { if (!window.ilabIntro) document.documentElement.classList.remove('intro-on'); }, 8000);
 </script>
 <script type="module">
 import * as THREE from 'three';
@@ -904,10 +958,150 @@ flasks.forEach(o => { o.H = o.HT; rebuildFlask(o); });
 renderFilters(); select(null);
 $('#loading').hidden = true;
 
+/* ============ abertura cinematográfica (≤ 5 s) ============ */
+// A câmera orbita o Erlenmeyer desacelerando, com termos e números dos ensaios girando junto.
+// Ela para de frente, o frasco encolhe até virar o "A" do logo e a bancada se abre a partir dele.
+// Clique, Esc ou "Pular" vão direto para a saída.
+let introCobre = false;
+function abertura() {
+  const el = $('#intro'), root = document.documentElement;
+  if (!root.classList.contains('intro-on')) { el.remove(); return; }
+  window.ilabIntro = true; introCobre = true;
+  try { sessionStorage.setItem('ilab-intro', '1'); } catch (e) { }
+  const brand = el.querySelector('.in-brand'), logo = brand.querySelector('ilab-logo');
+  const fim = () => { introCobre = false; el.remove(); root.classList.remove('intro-on'); removeEventListener('keydown', tecla, true); };
+  const tecla = e => { if (['Escape', 'Enter', ' '].includes(e.key)) { e.preventDefault(); e.stopPropagation(); pular(); } };
+  addEventListener('keydown', tecla, true);
+  if (reduce) {
+    // movimento reduzido: só o logo, sem órbita
+    brand.classList.add('on', 'a'); let saiu = false;
+    var pular = () => { if (saiu) return; saiu = true; introCobre = false; el.style.transition = 'opacity .35s'; el.style.opacity = 0; setTimeout(fim, 380); };
+    setTimeout(pular, 1100); el.addEventListener('click', pular); return;
+  }
+
+  const R = new THREE.WebGLRenderer({ canvas: el.querySelector('canvas'), antialias: true });
+  R.setPixelRatio(Math.min(devicePixelRatio, 2)); R.outputEncoding = THREE.sRGBEncoding; R.setClearColor(0x050d0a);
+  const S = new THREE.Scene(), C = new THREE.PerspectiveCamera(30, 1, .05, 200);
+  const edge = m => { m.uniforms.uEdge.value.setHex(0x8fbfa9, THREE.LinearSRGBColorSpace); return m; };
+  const gB = edge(glassMat(THREE.BackSide, .02, .26, .3)), gF = edge(glassMat(THREE.FrontSide, .03, .45, .55)), rm = edge(glassMat(THREE.FrontSide, .1, .7, .8));
+  const back = new THREE.Mesh(flaskGeo, gB); back.renderOrder = 0;
+  const front = new THREE.Mesh(flaskGeo, gF); front.renderOrder = 3;
+  const lm = liqMat([0xffc24a, 0xd8780a, .55, .95]), liq = new THREE.Mesh(new THREE.BufferGeometry(), lm); liq.renderOrder = 2;
+  const rod = new THREE.Mesh(rodGeo, rm); rod.renderOrder = 1;
+  const rTop = new THREE.Vector3(-.34, 2.95, .04), rBot = new THREE.Vector3(.3, .16, -.03);
+  rod.position.copy(rTop).add(rBot).multiplyScalar(.5); rod.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), rTop.clone().sub(rBot).normalize());
+  const rodG = new THREE.Group(); rodG.add(rod);
+  const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: 0xff9a2a, transparent: true, opacity: 0, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending }));
+  glow.position.y = .85; glow.scale.setScalar(5.5); glow.renderOrder = -2;
+  // poeira em suspensão: dá profundidade à órbita
+  const N = 420, pp = new Float32Array(N * 3), r0 = rng(21);
+  for (let i = 0; i < N; i++) { const a = r0() * 6.283, d = 1.3 + r0() * 7; pp.set([Math.cos(a) * d, -1.5 + r0() * 5.5, Math.sin(a) * d], i * 3); }
+  const dg = new THREE.BufferGeometry(); dg.setAttribute('position', new THREE.BufferAttribute(pp, 3));
+  const dust = new THREE.Points(dg, new THREE.PointsMaterial({ color: 0x9fd6bb, size: .028, transparent: true, opacity: 0, depthWrite: false }));
+  // anéis que pulsam na base, como a leitura de um equipamento
+  const rings = [0, 1].map(() => { const m = new THREE.Mesh(new THREE.RingGeometry(.985, 1, 96), new THREE.MeshBasicMaterial({ color: 0x3bbf7c, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide })); m.rotation.x = -Math.PI / 2; m.position.y = .005; return m; });
+  S.add(glow, dust, ...rings, back, liq, rodG, front);
+
+  // termos e números reais dos ensaios, numa espiral em volta do frasco
+  const TOK = [['Massa específica', 't'], ['742,3 kg/m³', 'n'], ['ASTM D-4052', 'm'], ['Enxofre total', 't'], ['≤ 50 mg/kg', 'n'], ['ASTM D-5453', 'm'], ['Destilação', 't'], ['PFE 215 °C', 'n'], ['ASTM D-86', 'm'], ['Água · Karl Fischer', 't'], ['ASTM D-6304', 'm'], ['815–850 kg/m³', 'n'], ['Res. ANP 807/2020', 'm'], ['T95 ≤ 370 °C', 'n'], ['Carta de controle', 't'], ['Res. ANP 968/2024', 'm'], ['0–1 °C', 'n'], ['LIMS', 't'], ['triLAB', 't'], ['S10 · 10 mg/kg', 'n']];
+  const r1 = rng(7), wordsEl = el.querySelector('.in-words');
+  const toks = TOK.map(([txt, k], i) => {
+    const s = document.createElement('span'); s.className = 'tk tk-' + k; s.textContent = txt; wordsEl.append(s);
+    const a = i * 2.39996, rad = 1.8 + r1() * 1.1, y = -.15 + i / TOK.length * 3.1 + r1() * .3;
+    return { s, txt, p: new THREE.Vector3(Math.cos(a) * rad, y, Math.sin(a) * rad), num: /\d/.test(txt), fix: .8 + r1() * 1.4, inn: .1 + r1() * .9 };
+  });
+
+  const T_ORB = 2.75, T_SLOT = 3.55, T_ON = 3.0, T_A = 3.45, T_OUT = 4.15, T_END = 4.9;
+  const c01 = u => Math.min(1, Math.max(0, u)), eOut = u => 1 - Math.pow(1 - u, 3);
+  let fit = 1, slot = null, t0 = performance.now(), cheio = false, saindo = false, sloshed = false, lastQ = -1;
+  function tam() { const w = innerWidth, h = innerHeight; R.setSize(w, h, false); C.aspect = w / h; C.updateProjectionMatrix(); fit = Math.max(1, .95 / C.aspect); slot = null; }
+  addEventListener('resize', tam); tam();
+  // posição de câmera que encaixa o frasco 3D exatamente no "A" do logo
+  function slotOf() {
+    const r = logo.querySelector('.lg-a').getBoundingClientRect(), w = innerWidth, h = innerHeight, tv = Math.tan(THREE.MathUtils.degToRad(C.fov / 2));
+    const D = 2.33 * h / (2 * tv * Math.max(8, r.height)), wpp = 2 * D * tv / h;
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2, ox = -(cx - w / 2) * wpp, oy = 1.165 + (cy - h / 2) * wpp;
+    return { pos: new THREE.Vector3(ox, oy, D), look: new THREE.Vector3(ox, oy, 0), D, cx, cy };
+  }
+  var pular = () => { const t = (performance.now() - t0) / 1000; if (t < T_OUT) t0 -= (T_OUT - t) * 1000; };
+  el.addEventListener('click', pular);
+
+  const v = new THREE.Vector3(), look = new THREE.Vector3(), P0 = new THREE.Vector3(), L0 = new THREE.Vector3();
+  const nTot = samples.length, eTot = samples.length * ENS.length, cnt = $('#inCount'), tc = $('#inTc');
+  function quadro(now) {
+    if (!el.isConnected) return;
+    const t = (now - t0) / 1000, w = innerWidth, h = innerHeight;
+    // 1) órbita: quase uma volta inteira, desacelerando até parar de frente
+    const u = c01(t / T_ORB), e = eOut(u), ang = -5.4 * (1 - e);
+    const dist = (4.9 + 1.7 * ease(u)) * fit;
+    P0.set(Math.sin(ang) * dist, .2 + 1.05 * e, Math.cos(ang) * dist); L0.set(0, 1.4 - .25 * e, 0);
+    if (t < T_ORB) { C.position.copy(P0); C.lookAt(L0); C.rotateZ(.22 * (1 - e)); }
+    else {
+      // 2) o frasco encolhe e desliza até o lugar do "A" (1/distância interpolado: o encolhimento fica uniforme)
+      slot ||= slotOf();
+      const s = ease(c01((t - T_ORB) / (T_SLOT - T_ORB))), D0 = P0.z, Dk = 1 / (1 / D0 + (1 / slot.D - 1 / D0) * s), f = (Dk - D0) / (slot.D - D0 || 1);
+      C.position.lerpVectors(P0, slot.pos, f); C.lookAt(look.lerpVectors(L0, slot.look, f));
+    }
+    // líquido enchendo com redemoinho; o bastão gira e some antes do encaixe
+    if (t < 3 || !cheio) {
+      if (t >= 3) cheio = true;
+      const H = hFromMl(205 * ease(c01((t - .2) / 2.3))), vort = .2 * (1 - c01((t - .3) / 2.4));
+      liq.geometry.dispose(); liq.visible = H > .06; liq.geometry = H > .06 ? new THREE.LatheGeometry(cutProfile(flaskInner, H, vort, .022), 96) : new THREE.BufferGeometry();
+      rodG.rotation.y = -8 * eOut(c01(t / 2.6));
+    }
+    const fin = c01(t / .5), fA = 1 - c01((t - T_A) / .3);
+    gB.uniforms.uFade.value = gF.uniforms.uFade.value = lm.uniforms.uFade.value = fin * fA;
+    rm.uniforms.uFade.value = fin * (1 - c01((t - 2.3) / .5));
+    glow.material.opacity = .42 * fin * (1 - c01((t - T_ORB) / .6));
+    dust.material.opacity = .55 * fin * (1 - c01((t - T_ORB + .3) / .6)); dust.rotation.y = t * .06;
+    rings.forEach((m, i) => { const ph = (t * .75 + i * .5) % 1; m.scale.setScalar(1 + ph * 2.6); m.material.opacity = (1 - ph) * .55 * fin * (1 - c01((t - 2.2) / .5)); });
+    R.render(S, C);
+
+    // termos: projetados da cena 3D; os que passam atrás do frasco ficam apagados e desfocados
+    const out = ease(c01((t - 2.3) / .65)), k = Math.min(1.1, Math.max(.62, Math.min(w, h) / 820)), cd = C.position.distanceTo(L0), q = Math.floor(t * 18);
+    toks.forEach(o => {
+      v.set(o.p.x * (1 + out * 1.4), o.p.y + out * .5, o.p.z * (1 + out * 1.4));
+      const d = v.distanceTo(C.position); v.project(C);
+      const near = c01((cd - d) / 2.4 + .5), a = c01((t - o.inn) / .45) * (1 - out) * (.22 + .78 * near) * (v.z < 1 ? 1 : 0);
+      const st = o.s.style; st.opacity = a.toFixed(3);
+      if (a > 0) {
+        st.transform = `translate3d(${((v.x + 1) / 2 * w).toFixed(1)}px,${((1 - v.y) / 2 * h).toFixed(1)}px,0) translate(-50%,-50%) scale(${(Math.min(1.7, Math.max(.45, 5.2 / d)) * k).toFixed(3)})`;
+        st.filter = near < .4 ? `blur(${((.4 - near) * 6).toFixed(1)}px)` : 'none';
+      }
+      // números "rolando" até assentar no valor
+      if (o.num && q !== lastQ) o.s.textContent = t < o.fix ? o.txt.replace(/\d/g, () => (Math.random() * 10) | 0) : o.txt;
+    });
+    if (q !== lastQ) {
+      const cu = ease(c01((t - .3) / 2.4)); cnt.textContent = `${String(Math.round(nTot * cu)).padStart(2, '0')} amostras · ${String(Math.round(eTot * cu)).padStart(2, '0')} ensaios`;
+      tc.textContent = `00:00:${String(Math.floor(t)).padStart(2, '0')}:${String(Math.floor(t % 1 * 24)).padStart(2, '0')}`;
+      lastQ = q;
+    }
+    // 3) letras do logo entram em volta do frasco; o 3D dá lugar ao "A" desenhado
+    if (t >= T_ON) brand.classList.add('on');
+    if (t >= T_A) brand.classList.add('a');
+    if (t >= T_A + .3 && !sloshed) { sloshed = true; logo.slosh(); }
+    // 4) saída: barras recolhem e a bancada se abre num círculo a partir do "A"
+    if (t >= T_OUT) {
+      if (!saindo) {
+        saindo = true; slot ||= slotOf(); el.classList.add('out'); introCobre = false;
+        camera.position.copy(HOME.pos).add(new THREE.Vector3(-3.5, 5, 7)); controls.target.copy(HOME.target).add(new THREE.Vector3(0, -.6, 0));
+        goHome(); tween.d = 1.25;
+      }
+      const m = c01((t - T_OUT) / (T_END - T_OUT)), rr = Math.pow(m, 2.2) * Math.hypot(w, h) * 1.05;
+      el.style.webkitMaskImage = el.style.maskImage = `radial-gradient(circle at ${slot.cx}px ${slot.cy}px, transparent ${rr.toFixed(1)}px, #000 ${(rr + 1.5).toFixed(1)}px)`;
+      if (m >= 1) { removeEventListener('resize', tam); R.dispose(); dg.dispose(); liq.geometry.dispose(); fim(); return; }
+    }
+    requestAnimationFrame(quadro);
+  }
+  requestAnimationFrame(quadro);
+}
+abertura();
+
 /* ---- animação ---- */
 const clock = new THREE.Clock(); let screenT = 0;
 renderer.setAnimationLoop(() => {
   const dt = Math.min(clock.getDelta(), .05), t = clock.elapsedTime, k = Math.min(1, dt * 3);
+  if (introCobre) return; // a abertura cobre a tela: a bancada espera
   bottles.forEach(o => {
     if (Math.abs(o.h - o.hT) > .004) { o.h += (o.hT - o.h) * Math.min(1, dt * 2.2); rebuildBottle(o); }
     o.lift += (o.liftT - o.lift) * k; o.g.position.y = o.base.y + o.lift;

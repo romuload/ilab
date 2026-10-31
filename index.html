@@ -6,7 +6,12 @@
 <title>iLab · Minhas Consultas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="logo.js"></script>
+<script>
+// o sistema abre na Bancada 3D; as telas daqui sempre têm rota (#/...)
+if (!location.hash) location.replace('bancada.html' + location.search);
+</script>
 <style>
 :root{
   --bg:#F4F6F5; --surface:#FFFFFF; --surface-2:#F0F3F1; --hover:#EBF0ED;
@@ -69,10 +74,8 @@ p{margin:0}
 /* layout */
 .app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
 .sidebar{position:sticky;top:0;height:100vh;background:var(--surface);border-right:1px solid var(--border);padding:16px 12px;display:flex;flex-direction:column;gap:24px;overflow-y:auto}
-.brand{display:flex;align-items:center;gap:10px;padding:4px 8px;text-decoration:none;color:var(--fg)}
-.brand-mark{width:34px;height:34px;border-radius:9px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center}
-.brand-mark .ic{width:20px;height:20px}
-.brand b{font-size:18px;line-height:22px;display:block}
+.brand{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:6px 8px;text-decoration:none;color:var(--fg)}
+.brand ilab-logo{font-size:30px}
 .brand small{font-size:12px;color:var(--fg-3);display:block;line-height:16px}
 .nav-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-3);padding:0 10px 6px}
 .nav{display:flex;flex-direction:column;gap:2px}
@@ -349,6 +352,8 @@ table.tbl{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 .notif-pop{right:0;left:auto;width:360px;top:44px;padding:0}
 .notif-pop h3{padding:14px 16px 10px;border-bottom:1px solid var(--border)}
 .notif{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;text-align:left;background:none;border-left:0;border-right:0;border-top:0;width:100%;color:var(--fg)}
+.pop .notif{height:auto;align-items:flex-start;padding:12px 16px;border-radius:0;line-height:20px}
+.notif-pop{max-width:calc(100vw - 24px)}
 .notif:hover{background:var(--hover)}
 .notif:last-child{border-bottom:0}
 .notif .ndot{width:8px;height:8px;border-radius:50%;background:var(--brand);margin-top:6px;flex:none}
@@ -842,7 +847,7 @@ function renderSide() {
   const r = route().p;
   const act = p => (r === p || (p === 'consultas' && (r === 'nova' || r === 'editar'))) ? 'active' : '';
   $('#sidebar').innerHTML = `
-    <a class="brand" href="#/inicio"><span class="brand-mark">${icon('flask')}</span><span><b>iLab</b><small>Laboratório inteligente</small></span></a>
+    <a class="brand" href="#/inicio"><ilab-logo></ilab-logo><small>Laboratório inteligente</small></a>
     <div><div class="nav-label">Minhas Consultas</div><nav class="nav">
       <a href="#/inicio" class="${act('inicio')}">${icon('home')}Início</a>
       <a href="#/consultas" class="${act('consultas')}">${icon('list')}Consultas salvas</a>
