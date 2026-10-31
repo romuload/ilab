@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0B4A31">
 <title>iLab · Bancada 3D</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -163,7 +166,7 @@ button.pill:hover{background:#fff;transform:translateX(-2px)}
 .tk-m{font:500 13px/1 "JetBrains Mono",ui-monospace,Consolas,monospace;color:#E6ECE8;border:1px solid rgba(230,236,232,.32);padding:6px 9px;border-radius:4px;letter-spacing:.04em}
 .in-bar{position:absolute;left:0;right:0;height:max(9vh,46px);background:#000;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,32px);font:500 11px/1 "JetBrains Mono",ui-monospace,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase;color:#6f8a7d;transition:transform .75s cubic-bezier(.7,0,.2,1)}
 .in-bar.top{top:0}.in-bar.bot{bottom:0}
-.in-bar b{color:#d8e4de;font-weight:500}
+.in-bar ilab-logo{font-size:17px;margin-right:4px;vertical-align:-1px;font-family:Inter,sans-serif;letter-spacing:-.04em;text-transform:none}
 .intro.out .in-bar.top{transform:translateY(-100%)}.intro.out .in-bar.bot{transform:translateY(100%)}
 .in-skip{font:inherit;letter-spacing:inherit;text-transform:inherit;color:#d8e4de;background:none;border:1px solid rgba(216,228,222,.3);border-radius:999px;height:30px;padding:0 14px;cursor:pointer}
 .in-skip:hover{background:rgba(255,255,255,.08)}
@@ -200,7 +203,7 @@ button.pill:hover{background:#fff;transform:translateX(-2px)}
   <div class="in-words"></div>
   <div class="in-brand"><ilab-logo on-dark></ilab-logo><p>Laboratório inteligente</p></div>
   <div class="in-vig"></div><div class="in-grain"></div>
-  <div class="in-bar top"><span><b>iLAB</b> · Lab 275 · RECAP</span><button class="in-skip" type="button">Pular</button></div>
+  <div class="in-bar top"><span><ilab-logo on-dark></ilab-logo> · Lab 275 · RECAP</span><button class="in-skip" type="button">Pular</button></div>
   <div class="in-bar bot"><span id="inCount">00 amostras · 00 ensaios</span><span id="inTc">00:00:00</span></div>
 </div>
 <header class="top">
@@ -543,16 +546,18 @@ const lip = new THREE.Mesh(new RoundedBoxGeometry(8.1, .42, .08, 2, .02), rackMa
 const rackLabel = canvasTex(1024, 64, (g, w, h) => { g.fillStyle = '#f2f4f2'; g.fillRect(0, 0, w, h); g.fillStyle = '#3a4440'; g.font = '600 34px Inter, sans-serif'; g.fillText('ESTANTE A · AMOSTRAS DO DIA', 24, 44); });
 const rl = new THREE.Mesh(new THREE.PlaneGeometry(8.1 * .9, .36), new THREE.MeshStandardMaterial({ map: rackLabel, roughness: .8 })); rl.position.set(RX, .21, 1.805); rack.add(rl);
 
-function labelTexture(s) {
-  return canvasTex(512, 256, (g, w, h) => {
+function labelTexture(s) { return canvasTex(512, 256, (g, w, h) => drawLabel(g, w, h, s)); }
+function drawLabel(g, w, h, s) {
+  {
     g.fillStyle = '#fbfaf5'; g.fillRect(0, 0, w, h);
-    g.fillStyle = '#0A7A4A'; g.fillRect(0, 0, w, 34);
-    g.fillStyle = '#fff'; g.font = '600 22px Inter, sans-serif'; g.fillText('iLab · RECAP', 150, 24);
+    g.fillStyle = '#0A7A4A'; g.fillRect(0, 0, w, 40);
+    const lw = customElements.get('ilab-logo').draw(g, 150, 31, 26, { ink: '#fff', glass: '#fff' });
+    g.fillStyle = 'rgba(255,255,255,.85)'; g.font = '600 20px Inter, sans-serif'; g.fillText('· RECAP', 150 + lw + 10, 30);
     g.fillStyle = '#16201B'; g.font = '700 46px Inter, sans-serif'; g.fillText(String(s.id), 150, 92);
     g.font = '500 25px Inter, sans-serif'; g.fillText(`${PROD[s.p].cod} · ${PROD[s.p].n}`, 150, 132);
     g.fillStyle = '#67736C'; g.font = '400 22px Inter, sans-serif'; g.fillText(`${s.local} · ${s.hora}`, 150, 166);
     const r = rng(s.id); let x = 150; while (x < 400) { const bw = 2 + Math.floor(r() * 4); g.fillStyle = '#16201B'; g.fillRect(x, 186, bw, 50); x += bw + 2 + Math.floor(r() * 4); }
-  });
+  }
 }
 const labelGeo = new THREE.CylinderGeometry(.556, .556, 1.0, 48, 1, true, -1.35, 2.7);
 const bottles = samples.map((s, i) => {
@@ -953,6 +958,8 @@ new ResizeObserver(resize).observe(stage); resize();
 
 /* ---- início ---- */
 bottles.forEach(o => applySampleState(o, true));
+// as etiquetas usam o logo em Inter 800: redesenha quando a fonte chegar
+document.fonts.load('800 26px Inter').then(() => bottles.forEach(o => { const t = o.lab.material.map, { g, c } = t.userData; drawLabel(g, c.width, c.height, o.s); t.needsUpdate = true; }));
 showMethods(focusSample);
 flasks.forEach(o => { o.H = o.HT; rebuildFlask(o); });
 renderFilters(); select(null);

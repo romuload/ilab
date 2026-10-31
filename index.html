@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0B4A31">
 <title>iLab · Minhas Consultas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -102,6 +105,8 @@ p{margin:0}
 .user{display:flex;align-items:center;gap:10px;padding-left:8px;margin-left:4px;border-left:1px solid var(--border)}
 .user span{font-weight:500}
 .menu-btn{display:none}
+.top-logo{display:none;text-decoration:none;padding-top:8px}
+.top-logo ilab-logo{font-size:22px}
 
 .view{width:100%;max-width:1280px;padding:28px 32px 96px}
 .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}
@@ -466,6 +471,7 @@ dialog.dlg::backdrop{background:rgba(10,20,15,.45);backdrop-filter:blur(2px)}
   .sidebar{position:fixed;left:0;top:0;z-index:70;width:260px;transform:translateX(-105%);transition:transform .2s;box-shadow:var(--shadow-3)}
   .sidebar.open{transform:none}
   .menu-btn{display:grid}
+  .top-logo{display:flex}
   .topbar{padding:0 16px}
   .view{padding:20px 16px 96px}
   .wiz-foot{margin:24px -16px -96px;padding:12px 16px;flex-wrap:wrap}
@@ -863,6 +869,7 @@ function renderTop() {
   const r = route().p, novas = S.notifs.filter(n => !n.lida).length + S.processos.length;
   $('#topbar').innerHTML = `
     <button class="icon-btn menu-btn" data-action="nav-toggle" aria-label="Abrir menu">${icon('menu')}</button>
+    <a class="top-logo" href="#/inicio" aria-label="Início"><ilab-logo></ilab-logo></a>
     <div class="crumbs"><span>Minhas Consultas</span>${icon('right')}<b>${TITULOS[r] || ''}</b></div>
     <div class="top-actions">
       <div class="org"><label for="org">Órgão</label><select id="org" data-org>${ORGAOS.map(o => `<option value="${o[0]}" ${o[0] === S.orgao ? 'selected' : ''}>${o[0]} · ${o[1]}</option>`).join('')}</select></div>

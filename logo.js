@@ -61,6 +61,25 @@ ilab-logo.lg-slosh .lg-i i{animation:lg-hop .7s cubic-bezier(.3,.7,.4,1)}
     }
     slosh() { this.classList.remove('lg-slosh'); void this.offsetWidth; this.classList.add('lg-slosh'); clearTimeout(this._t); this._t = setTimeout(() => this.classList.remove('lg-slosh'), 1200); }
     fill() { this.removeAttribute('empty'); }
+    // mesmo desenho num <canvas> (etiquetas e telas da cena 3D). y é a linha de base; devolve a largura.
+    static draw(g, x, y, size, o = {}) {
+      const ink = o.ink || '#0B5A3A', ls = -.04 * size, x0 = x, h = .74 * size, k = h / 30;
+      g.save(); g.font = `800 ${size}px Inter, sans-serif`; g.textBaseline = 'alphabetic'; g.fillStyle = ink;
+      const wi = g.measureText('ı').width; g.fillText('ı', x, y);
+      const dot = g.createRadialGradient(0, 0, 0, 0, 0, .11 * size), cx = x + (wi + ls) / 2 + .015 * size, cy = y - .733 * size;
+      dot.addColorStop(0, '#9BE15D'); dot.addColorStop(1, '#4CAF2E');
+      g.save(); g.translate(cx - .03 * size, cy - .03 * size); g.fillStyle = dot; g.beginPath(); g.arc(.03 * size, .03 * size, .11 * size, 0, 7); g.fill(); g.restore();
+      x += wi + ls; g.fillText('L', x, y); x += g.measureText('L').width + ls + .03 * size;
+      g.save(); g.translate(x, y - h); g.scale(k, k);
+      const liq = g.createLinearGradient(0, 14, 0, 26); liq.addColorStop(0, '#FFC928'); liq.addColorStop(1, '#FF8000');
+      g.save(); g.clip(new Path2D(CLIP)); g.fillStyle = liq; g.fill(new Path2D(WAVE)); g.restore();
+      let st = o.glass; if (!st) { st = g.createLinearGradient(0, 0, 32, 30); st.addColorStop(0, '#36B05E'); st.addColorStop(1, '#0B5A3A'); }
+      g.lineWidth = 3.4; g.lineCap = g.lineJoin = 'round'; g.strokeStyle = st; g.stroke(new Path2D(GLASS));
+      g.fillStyle = '#FFA51F'; [[17, -2.6, 1.7], [21.6, -6.6, 2.3], [18, -11.4, 1.5]].forEach(([a, b, r]) => { g.beginPath(); g.arc(a, b, r, 0, 7); g.fill(); });
+      g.restore();
+      x += 32 * k + .01 * size; g.fillStyle = ink; g.fillText('B', x, y); x += g.measureText('B').width;
+      g.restore(); return x - x0;
+    }
   }
   customElements.define('ilab-logo', ILabLogo);
 })();
