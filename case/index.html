@@ -210,14 +210,13 @@ section{position:relative}
 .learn{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .learn .card b{display:block;font:500 12px/1 var(--mono);color:var(--amber);margin-bottom:18px}
 @media (max-width:900px){.learn{grid-template-columns:1fr}}
-.final{text-align:center;overflow:hidden;padding-bottom:64px}
+.final{text-align:center;overflow:hidden}
 .final::before{content:"";position:absolute;inset:auto -10% 0;height:90%;background:radial-gradient(50% 50% at 50% 70%,rgba(54,176,94,.2),transparent 70%);pointer-events:none}
 .final .wrap{position:relative}
 .final ilab-logo{font-size:clamp(64px,10vw,128px)}
 .final h2{margin:34px auto 20px;max-width:14ch}
 .final .lead{margin:0 auto}
 .ctas{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:40px}
-.final .monitor{max-width:980px;margin:72px auto 0}
 footer{border-top:1px solid var(--line);padding:28px 0;font-size:13px;color:var(--muted)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
 
@@ -489,10 +488,6 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
       <a class="btn" href="../erlenmeyer.html">Free lab</a>
       <a class="btn" href="https://github.com/romuload/ilab">GitHub</a>
     </div>
-    <div class="monitor rv" id="finalMon">
-      <div class="bezel"><div class="screen"><img src="shots/d-bancada.jpg" loading="lazy" alt="iLAB 3D bench"></div></div>
-      <div class="neck"></div><div class="foot"></div>
-    </div>
   </div>
 </section>
 
@@ -579,7 +574,6 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
         .fromTo('#f2', { opacity: 0 }, { opacity: 1, duration: .5 }, '<')
         .fromTo('#f2 img', { scale: 1.35, xPercent: 8 }, { scale: 1, xPercent: 0, ease: 'none', duration: 1.2 }, '<');
 
-      gsap.fromTo('#finalMon', { rotateX: -18, y: 80 }, { rotateX: 0, y: 0, ease: 'none', scrollTrigger: { trigger: '#finalMon', start: 'top 100%', end: 'top 40%', scrub: .6 } });
       return () => { root.classList.remove('wide'); };
     });
 
