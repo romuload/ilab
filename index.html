@@ -470,6 +470,9 @@ dialog.dlg::backdrop{background:rgba(10,20,15,.45);backdrop-filter:blur(2px)}
   .app{grid-template-columns:1fr}
   .sidebar{position:fixed;left:0;top:0;z-index:70;width:260px;transform:translateX(-105%);transition:transform .2s;box-shadow:var(--shadow-3)}
   .sidebar.open{transform:none}
+  body.nav-open{overflow:hidden}
+  body.nav-open::after{content:"";position:fixed;inset:0;z-index:65;background:rgba(10,20,15,.45);animation:fade .2s}
+  @keyframes fade{from{opacity:0}}
   .menu-btn{display:grid}
   .top-logo{display:flex}
   .topbar{padding:0 16px}
@@ -843,10 +846,16 @@ function onRoute() {
     S.pendingStep = null;
   }
   if (r.p === 'ajustes') S.aj = clone(S.ajustes);
-  $('#sidebar').classList.remove('open');
+  nav(false);
   render(); window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', onRoute);
+// menu lateral sobreposto (só no celular): abre/fecha junto com o fundo escuro
+function nav(open) {
+  $('#sidebar').classList.toggle('open', open); document.body.classList.toggle('nav-open', open);
+  $('.menu-btn')?.setAttribute('aria-expanded', open);
+}
+matchMedia('(min-width:861px)').addEventListener('change', e => { if (e.matches) nav(false); });
 
 /* ---------- casca ---------- */
 function renderSide() {
@@ -1452,7 +1461,7 @@ function render() { renderSide(); renderTop(); renderView(); renderHelp(); }
 function setPath(o, path, v) { const k = path.split('.'); let t = o; k.slice(0, -1).forEach(p => t = t[p]); t[k[k.length - 1]] = v; }
 const scopeObj = s => ({ draft: S.draft, exec: S.exec, aj: S.aj, dlg: S.dlg }[s]);
 const ACTIONS = {
-  'nav-toggle': () => $('#sidebar').classList.toggle('open'),
+  'nav-toggle': () => nav(!$('#sidebar').classList.contains('open')),
   help: () => { S.help = !S.help; renderHelp(); renderTop(); },
   notif: () => { S.notifOpen = !S.notifOpen; renderTop(); },
   'notif-open': d => { const n = S.notifs[+d.i]; n.lida = true; S.notifOpen = false; renderTop(); if (n.run) executar(n.run); else if (n.aba) { S.abaAtiva = n.aba; go('#/resultados'); } else if (n.go) go(n.go); },
@@ -1509,6 +1518,8 @@ const ACTIONS = {
   'toast-act': (d, el) => { S.toastFns[d.t]?.(); el.closest('.toast')?.remove(); }
 };
 document.addEventListener('click', e => {
+  // menu no celular: toque fora (no fundo escuro) ou em qualquer link dele fecha
+  if ($('#sidebar').classList.contains('open') && !e.target.closest('.menu-btn') && (!e.target.closest('#sidebar') || e.target.closest('#sidebar a'))) nav(false);
   const a = e.target.closest('[data-action]');
   if (S.picker && !e.target.closest('.picker')) { const id = S.picker; S.picker = null; refreshPicker(id); }
   let need = false;
@@ -1535,6 +1546,7 @@ document.addEventListener('keydown', e => {
     } else if (e.key === 'Backspace' && !t.value && ref.list.length) { ref.list.pop(); refreshPicker(id, true); }
     else if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); S.picker = null; refreshPicker(id, true); }
   }
+  if (e.key === 'Escape' && $('#sidebar').classList.contains('open')) { nav(false); $('.menu-btn')?.focus(); }
   if (e.key === 'Escape' && S.help && !S.dlg) { S.help = false; renderHelp(); renderTop(); }
 });
 document.addEventListener('focusin', e => {
