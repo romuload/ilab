@@ -504,3 +504,7 @@ dialog.dlg::backdrop{background:rgba(10,20,15,.45)}
   .link{display:inline-block;padding:var(--sp-3) 0;margin:calc(var(--sp-3) * -1) 0}
   .qname{padding:var(--sp-3) 0;margin:calc(var(--sp-3) * -1) 0}
 }
+
+/* comparar: ações e barra iguais nos dois painéis, com ou sem "Ao vivo" */
+.cmp .pane-actions{flex-basis:100%}
+.cmp .live-more{display:none}

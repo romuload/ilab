@@ -732,7 +732,7 @@ function barraPane(a) {
   if (a.modo === 'certificado') return `<div class="pane-bar"><span class="count">${a.rows.length} certificados</span>${dica}</div>`;
   const fora = a.rows.filter(r => stRow(a.set, r) === 'fora').length;
   return `<div class="pane-bar"><div class="seg" role="group" aria-label="Filtrar amostras"><button aria-pressed="${!a.so}" class="${!a.so ? 'on' : ''}" data-action="aba-so" data-key="${a.key}" data-v="0">Todas<span class="n">${a.rows.length}</span></button><button aria-pressed="${a.so}" class="${a.so ? 'on' : ''}" data-action="aba-so" data-key="${a.key}" data-v="1">Fora de especificação<span class="n">${fora}</span></button></div>
-    ${a.modo === 'online' ? '<span class="live"><i></i>Ao vivo · atualiza a cada 15 s</span>' : ''}${dica}</div>`;
+    ${a.modo === 'online' ? '<span class="live"><i></i>Ao vivo<span class="live-more"> · atualiza a cada 15 s</span></span>' : ''}${dica}</div>`;
 }
 function spark(v, e) {
   const w = 120, h = 30, lo = Math.min(...v, e.min ?? Infinity), hi = Math.max(...v, e.max ?? -Infinity), sp = hi - lo || 1;
