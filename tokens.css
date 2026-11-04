@@ -1,0 +1,118 @@
+/* iLab: tokens e componentes compartilhados por index, bancada e erlenmeyer.
+   Espaço 4-96, fonte 12-32 (13 só em dados densos), raios 6/8/12/pill, controles 32/40 (44 no toque). */
+:root{
+  --bg:#F4F6F5; --surface:#FFFFFF; --surface-2:#F0F3F1; --hover:#EBF0ED;
+  --border:#E1E6E3; --border-strong:#C5CEC9; --border-control:#7F8B84;
+  --fg:#16201B; --fg-2:#46534C; --fg-3:#616D66;
+  --brand:#0A7A4A; --brand-hover:#086640; --brand-subtle:#E4F3EA; --on-brand:#FFFFFF;
+  --danger:#BF3328; --danger-subtle:#FBEAE8;
+  --warn:#8F5600; --warn-subtle:#FFF2D9;
+  --ok:#1B7740; --ok-subtle:#E4F4E9;
+  --info:#2157D3; --info-subtle:#E8EFFD;
+  --purple:#6A3CCB; --purple-subtle:#EFE9FC; --liquid:#A9C2B8;
+  --shadow-1:0 1px 3px rgba(18,44,30,.12);
+  --shadow-2:0 8px 24px rgba(18,44,30,.10);
+  --shadow-3:0 20px 56px rgba(18,44,30,.20);
+
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px;
+  --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px; --sp-24:96px;
+  --fs-12:12px; --fs-13:13px; --fs-14:14px; --fs-16:16px; --fs-20:20px; --fs-24:24px; --fs-32:32px;
+  --r-sm:6px; --r:8px; --r-lg:12px; --r-pill:999px;
+  --h-sm:32px; --h-md:40px; --h-touch:44px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1311; --surface:#151C19; --surface-2:#1A2320; --hover:#1F2925;
+    --border:#25302B; --border-strong:#34413B; --border-control:#66736C;
+    --fg:#E6ECE8; --fg-2:#B2BDB7; --fg-3:#8A968F;
+    --brand:#3BBF7C; --brand-hover:#56CF90; --brand-subtle:#14301F; --on-brand:#06170E;
+    --danger:#F07468; --danger-subtle:#371917;
+    --warn:#F0B44E; --warn-subtle:#33260E;
+    --ok:#4BC27E; --ok-subtle:#11301D;
+    --info:#7DA6FF; --info-subtle:#172540;
+    --purple:#B49AF5; --purple-subtle:#261C40; --liquid:#4E6B60;
+    --shadow-1:0 1px 3px rgba(0,0,0,.5); --shadow-2:0 8px 24px rgba(0,0,0,.45); --shadow-3:0 20px 56px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1311; --surface:#151C19; --surface-2:#1A2320; --hover:#1F2925;
+  --border:#25302B; --border-strong:#34413B; --border-control:#66736C;
+  --fg:#E6ECE8; --fg-2:#B2BDB7; --fg-3:#8A968F;
+  --brand:#3BBF7C; --brand-hover:#56CF90; --brand-subtle:#14301F; --on-brand:#06170E;
+  --danger:#F07468; --danger-subtle:#371917;
+  --warn:#F0B44E; --warn-subtle:#33260E;
+  --ok:#4BC27E; --ok-subtle:#11301D;
+  --info:#7DA6FF; --info-subtle:#172540;
+  --purple:#B49AF5; --purple-subtle:#261C40; --liquid:#4E6B60;
+  --shadow-1:0 1px 3px rgba(0,0,0,.5); --shadow-2:0 8px 24px rgba(0,0,0,.45); --shadow-3:0 20px 56px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+
+/* base */
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:var(--fs-14)/20px Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{margin:0;letter-spacing:-.01em}
+p{margin:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.sp{flex:1}
+
+/* ícones */
+.ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.si{display:block;flex:none}
+
+/* botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);height:var(--h-md);padding:0 var(--sp-4);border-radius:var(--r);border:1px solid var(--border-strong);background:var(--surface);color:var(--fg);font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .12s,box-shadow .12s,border-color .12s}
+.btn:hover{background:var(--hover)}
+.btn-primary{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.btn-primary:hover{background:var(--brand-hover);border-color:var(--brand-hover)}
+.btn-ghost{border-color:transparent;background:none;color:var(--fg-2)}
+.btn-ghost:hover{background:var(--hover);color:var(--fg)}
+.btn-danger{background:var(--danger);border-color:var(--danger);color:#fff}
+.btn-danger:hover{filter:brightness(.95)}
+.btn-sm{height:var(--h-sm);padding:0 var(--sp-3);font-size:var(--fs-13)}
+.btn-sm .ic{width:16px;height:16px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn[aria-pressed="true"]:not(.btn-primary){background:var(--brand-subtle);border-color:var(--brand);color:var(--brand)}
+
+/* controle segmentado */
+.seg{display:inline-flex;padding:var(--sp-1);background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);gap:2px;max-width:100%}
+.seg button{height:30px;padding:0 var(--sp-3);border-radius:var(--r-sm);border:1px solid transparent;background:none;color:var(--fg-2);font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:var(--sp-2);white-space:nowrap}
+.seg button:hover{color:var(--fg)}
+.seg button.on{background:var(--surface);border-color:var(--border-strong);color:var(--fg);font-weight:600}
+.seg .n{font-size:var(--fs-12);color:var(--fg-3);font-weight:600}
+
+/* status: cor sempre com ícone e texto */
+.st{display:inline-flex;align-items:center;gap:var(--sp-1);font-size:var(--fs-12);font-weight:600;padding:2px var(--sp-2) 2px var(--sp-1);border-radius:var(--r-sm);white-space:nowrap}
+.st .ic{width:14px;height:14px;stroke-width:2.2}
+.st-ok{background:var(--ok-subtle);color:var(--ok)}
+.st-warn{background:var(--warn-subtle);color:var(--warn)}
+.st-danger{background:var(--danger-subtle);color:var(--danger)}
+.st-info{background:var(--info-subtle);color:var(--info)}
+.st-purple{background:var(--purple-subtle);color:var(--purple)}
+.st-neutral{background:var(--surface-2);color:var(--fg-2)}
+.tag{display:inline-flex;align-items:center;gap:var(--sp-1);height:24px;padding:0 var(--sp-2);border-radius:var(--r-sm);background:var(--surface-2);border:1px solid var(--border);font-size:var(--fs-12);font-weight:500;color:var(--fg-2);white-space:nowrap}
+.tag .ic{width:14px;height:14px}
+
+/* cabeçalho das telas 3D (bancada e laboratório livre) */
+.top{height:60px;flex:none;display:flex;align-items:center;gap:var(--sp-4);padding:0 max(var(--sp-5),env(safe-area-inset-right)) 0 max(var(--sp-5),env(safe-area-inset-left));background:var(--surface);border-bottom:1px solid var(--border)}
+.top .brand{display:flex;align-items:center;color:var(--fg);text-decoration:none;padding:var(--sp-1) var(--sp-3) var(--sp-1) 0;border-right:1px solid var(--border)}
+.top .brand ilab-logo{font-size:26px}
+.ttl{min-width:0}
+.ttl b{display:block;font-size:var(--fs-16);line-height:20px;white-space:nowrap}
+.ttl span{display:block;font-size:var(--fs-12);line-height:16px;color:var(--fg-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* alvos de toque e movimento reduzido */
+@media (max-width:860px){
+  .btn,.btn-sm{min-height:var(--h-touch);min-width:var(--h-touch)}
+  .seg{overflow-x:auto;scrollbar-width:none}
+  .seg::-webkit-scrollbar{display:none}
+  .seg button{flex:none;height:36px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,::before,::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
