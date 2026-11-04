@@ -9,8 +9,10 @@
 <title>iLab · Bancada 3D</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
 <script src="logo.js"></script>
+<script src="icons.js"></script>
 <script>
 // abertura: uma vez por sessão; ?intro=1 força e ?intro=0 pula
 (() => {
@@ -20,137 +22,89 @@
 })();
 </script>
 <style>
-:root{
-  --bg:#F4F6F5; --surface:#FFFFFF; --surface-2:#F0F3F1; --hover:#EBF0ED;
-  --border:#E1E6E3; --border-strong:#C5CEC9;
-  --fg:#16201B; --fg-2:#46534C; --fg-3:#67736C;
-  --brand:#0A7A4A; --brand-hover:#086640; --brand-subtle:#E4F3EA; --on-brand:#FFFFFF;
-  --danger:#BF3328; --danger-subtle:#FBEAE8; --warn:#8F5600; --warn-subtle:#FFF2D9;
-  --ok:#1B7740; --ok-subtle:#E4F4E9; --info:#2157D3; --info-subtle:#E8EFFD;
-  --purple:#6A3CCB; --purple-subtle:#EFE9FC; --liquid:#A9C2B8;
-  --shadow-1:0 1px 2px rgba(18,44,30,.06),0 1px 3px rgba(18,44,30,.05); --shadow-3:0 20px 56px rgba(18,44,30,.20);
-  color-scheme:light;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E1311; --surface:#151C19; --surface-2:#1A2320; --hover:#1F2925; --border:#25302B; --border-strong:#34413B;
-  --fg:#E6ECE8; --fg-2:#B2BDB7; --fg-3:#8A968F; --brand:#3BBF7C; --brand-hover:#56CF90; --brand-subtle:#14301F; --on-brand:#06170E;
-  --danger:#F07468; --danger-subtle:#371917; --warn:#F0B44E; --warn-subtle:#33260E; --ok:#4BC27E; --ok-subtle:#11301D;
-  --info:#7DA6FF; --info-subtle:#172540; --purple:#B49AF5; --purple-subtle:#261C40; --liquid:#4E6B60;
-  --shadow-1:0 1px 2px rgba(0,0,0,.4); --shadow-3:0 20px 56px rgba(0,0,0,.6); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0E1311; --surface:#151C19; --surface-2:#1A2320; --hover:#1F2925; --border:#25302B; --border-strong:#34413B;
-  --fg:#E6ECE8; --fg-2:#B2BDB7; --fg-3:#8A968F; --brand:#3BBF7C; --brand-hover:#56CF90; --brand-subtle:#14301F; --on-brand:#06170E;
-  --danger:#F07468; --danger-subtle:#371917; --warn:#F0B44E; --warn-subtle:#33260E; --ok:#4BC27E; --ok-subtle:#11301D;
-  --info:#7DA6FF; --info-subtle:#172540; --purple:#B49AF5; --purple-subtle:#261C40; --liquid:#4E6B60;
-  --shadow-1:0 1px 2px rgba(0,0,0,.4); --shadow-3:0 20px 56px rgba(0,0,0,.6); color-scheme:dark}
-*{box-sizing:border-box}
-html,body{margin:0;height:100%}
-body{font:14px/20px Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
-button{font:inherit;color:inherit}
-h1,h2,h3{margin:0;letter-spacing:-.01em}
-p{margin:0}
-.ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
-:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-
-.top{height:60px;flex:none;display:flex;align-items:center;gap:16px;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--border)}
-.back{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 10px;border-radius:8px;color:var(--fg-2);text-decoration:none;font-weight:500}
-.back:hover{background:var(--hover);color:var(--fg)}
-.brand{display:flex;align-items:center;color:var(--fg);text-decoration:none;padding:4px 14px 4px 0;border-right:1px solid var(--border)}
-.brand ilab-logo{font-size:26px}
-.ttl b{display:block;font-size:16px;line-height:20px}
-.ttl span{font-size:12px;color:var(--fg-3)}
-.sp{flex:1}
-.seg{display:inline-flex;padding:3px;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;gap:2px}
-.seg button{height:30px;padding:0 12px;border-radius:6px;border:0;background:none;color:var(--fg-2);font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
-.seg button.on{background:var(--surface);color:var(--fg);box-shadow:var(--shadow-1);font-weight:600}
-.seg .n{font-size:11px;color:var(--fg-3);font-weight:600}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--fg);font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
-.btn:hover{background:var(--hover)}
-.btn-primary{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
-.btn-primary:hover{background:var(--brand-hover)}
-.btn-sm{height:32px;padding:0 12px;font-size:13px}
-.btn .ic{width:16px;height:16px}
+html,body{height:100%}
+body{display:flex;flex-direction:column}
 
 .lab{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 380px}
 .stage{position:relative;min-width:0;min-height:0;background:#d9dedb;overflow:hidden;touch-action:none}
 .stage canvas{display:block;width:100%;height:100%}
 .loading{position:absolute;inset:0;display:grid;place-items:center;color:#4b5651;font-weight:500;background:#e4e8e6}
 .loading[hidden]{display:none}
-.hud{position:absolute;top:14px;right:14px;display:flex;gap:8px}
+.hud{position:absolute;top:var(--sp-3);right:var(--sp-3);display:flex;gap:var(--sp-2)}
 .hud .btn{box-shadow:var(--shadow-1)}
-.crumb{position:absolute;left:14px;top:14px;right:250px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;pointer-events:none}
+.crumb{position:absolute;left:var(--sp-3);top:var(--sp-3);right:250px;display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap;pointer-events:none}
 .crumb>*{pointer-events:auto}
-.pill{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);font-size:13px;font-weight:600;color:#16201B;border:0;box-shadow:0 1px 3px rgba(0,0,0,.14);white-space:nowrap;font-family:inherit}
+.pill{display:inline-flex;align-items:center;gap:var(--sp-2);height:var(--h-sm);padding:0 var(--sp-3);border-radius:var(--r-pill);background:#fff;font-size:var(--fs-13);font-weight:600;color:#16201B;border:0;box-shadow:0 1px 3px rgba(0,0,0,.14);white-space:nowrap;font-family:inherit}
 .pill .ic{width:16px;height:16px}
 button.pill{cursor:pointer;transition:background .15s,transform .15s}
-button.pill:hover{background:#fff;transform:translateX(-2px)}
+button.pill:hover{background:#F0F3F1;transform:translateX(-2px)}
 .pill.cur{background:#0A7A4A;color:#fff;animation:pop .35s ease}
-.crumb .sep{color:#4b5651;font-weight:600}
-.crumb .esc{font-size:12px;color:#36403b;background:rgba(255,255,255,.72);padding:5px 9px;border-radius:7px}
-.crumb kbd{font:600 11px Inter,sans-serif;border:1px solid #b9c1bd;border-bottom-width:2px;border-radius:4px;padding:0 4px;background:#fff}
+.crumb .sep{display:grid;place-items:center;color:#36403b}
+.crumb .sep .ic{width:16px;height:16px}
+.crumb .esc{font-size:var(--fs-12);line-height:16px;color:#36403b;background:#fff;padding:var(--sp-1) var(--sp-2);border-radius:var(--r-sm)}
+.crumb kbd{font:600 12px Inter,sans-serif;border:1px solid #b9c1bd;border-bottom-width:2px;border-radius:4px;padding:0 var(--sp-1);background:#fff}
 @keyframes pop{from{opacity:0;transform:scale(.9)}}
 @keyframes pin{from{opacity:0;transform:translateX(14px)}}
 .panel>*{animation:pin .3s ease}
-@media (prefers-reduced-motion:reduce){.panel>*,.pill.cur{animation:none}}
-.tip{position:absolute;pointer-events:none;z-index:5;background:rgba(18,26,22,.92);color:#fff;padding:8px 10px;border-radius:8px;font-size:12px;line-height:16px;transform:translate(14px,14px);white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.tip b{display:block;font-size:13px}
+.tip{position:absolute;pointer-events:none;z-index:5;background:#121A16;color:#fff;padding:var(--sp-2) var(--sp-3);border-radius:var(--r);font-size:var(--fs-12);line-height:16px;transform:translate(14px,14px);white-space:nowrap;box-shadow:var(--shadow-2)}
+.tip b{display:block;font-size:var(--fs-13)}
 .tip[hidden]{display:none}
-.legend{position:absolute;left:14px;bottom:14px;width:300px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);color:#16201B;border-radius:12px;padding:14px 16px;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.tip .acao{display:block;opacity:.7;font-style:normal;margin-top:2px}
+.legend{position:absolute;left:var(--sp-3);bottom:var(--sp-3);width:300px;background:#fff;color:#16201B;border-radius:var(--r-lg);padding:var(--sp-4);box-shadow:var(--shadow-2)}
 .legend[hidden]{display:none}
-.legend h3{font-size:13px;margin-bottom:10px}
-.legend ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
-.legend li{display:flex;gap:10px;align-items:center;font-size:12px;line-height:16px;color:#46534C}
+.legend h3{font-size:var(--fs-14);line-height:20px;margin-bottom:var(--sp-3)}
+.legend ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--sp-2)}
+.legend li{display:flex;gap:var(--sp-3);align-items:center;font-size:var(--fs-12);line-height:16px;color:#46534C}
 .legend li b{color:#16201B}
-.legend a{display:inline-block;margin-top:10px;font-size:12px;color:#0A7A4A;font-weight:600}
-.led{width:12px;height:12px;border-radius:50%;flex:none;box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+.legend a{display:inline-block;margin-top:var(--sp-3);font-size:var(--fs-12);color:#0A7A4A;font-weight:600}
+.led{width:12px;height:12px;border-radius:50%;flex:none;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.leds{display:flex;gap:2px;flex:none}
 
 .panel{border-left:1px solid var(--border);background:var(--surface);overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column}
-.p-head{padding:20px 20px 16px;border-bottom:1px solid var(--border)}
-.p-head .eyebrow{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-3);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-.p-title{display:flex;gap:14px;align-items:center}
-.p-title h2{font-size:20px;line-height:26px}
-.p-title p{color:var(--fg-3);font-size:13px}
-.p-body{padding:16px 20px 24px;display:flex;flex-direction:column;gap:18px}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
-.st{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:2px 8px 2px 6px;border-radius:6px;white-space:nowrap}
-.st .ic{width:14px;height:14px;stroke-width:2.2}
-.st-ok{background:var(--ok-subtle);color:var(--ok)} .st-danger{background:var(--danger-subtle);color:var(--danger)}
-.st-warn{background:var(--warn-subtle);color:var(--warn)} .st-info{background:var(--info-subtle);color:var(--info)}
-.st-purple{background:var(--purple-subtle);color:var(--purple)} .st-neutral{background:var(--surface-2);color:var(--fg-2)}
-.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border);font-size:12px;font-weight:500;color:var(--fg-2)}
-.sec h3{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-3);margin-bottom:8px}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px}
+.p-head{padding:var(--sp-5) var(--sp-5) var(--sp-4);border-bottom:1px solid var(--border)}
+.p-bar{font-size:var(--fs-12);font-weight:600;color:var(--fg-3);margin-bottom:var(--sp-2);display:flex;justify-content:space-between;align-items:center;gap:var(--sp-2)}
+.p-head h2{font-size:var(--fs-20);line-height:28px}
+.p-sub{color:var(--fg-3);font-size:var(--fs-13);line-height:18px;margin-top:2px}
+.p-title{display:flex;gap:var(--sp-4);align-items:center}
+.p-title p{color:var(--fg-3);font-size:var(--fs-13);line-height:18px}
+.p-body{padding:var(--sp-4) var(--sp-5) var(--sp-6);display:flex;flex-direction:column;gap:var(--sp-4)}
+.chips{display:flex;gap:var(--sp-2);flex-wrap:wrap;margin-top:var(--sp-3)}
+.sec h3{font-size:var(--fs-13);line-height:18px;font-weight:600;color:var(--fg-2);margin-bottom:var(--sp-2)}
+.sec h3 span{font-weight:400;color:var(--fg-3)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:var(--sp-2) var(--sp-4);font-size:var(--fs-13);margin:0}
 .kv dt{color:var(--fg-3)} .kv dd{margin:0;font-weight:500}
-.steps{display:flex;gap:4px}
+.steps{display:flex;gap:var(--sp-1)}
 .steps i{flex:1;height:6px;border-radius:3px;background:var(--border)}
 .steps i.on{background:var(--brand)}
-.steps-l{display:flex;justify-content:space-between;font-size:11px;color:var(--fg-3);margin-top:6px}
-.mlist{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.mrow{display:flex;gap:12px;align-items:center;padding:10px 12px;border:0;border-bottom:1px solid var(--border);background:none;text-align:left;cursor:pointer;width:100%}
+.steps-l{display:flex;justify-content:space-between;font-size:var(--fs-12);line-height:16px;color:var(--fg-3);margin-top:var(--sp-2)}
+.steps-t{font-size:var(--fs-13);color:var(--fg-2);margin-top:var(--sp-2)}
+.mlist{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.mrow{display:flex;gap:var(--sp-3);align-items:center;padding:var(--sp-2) var(--sp-3);min-height:48px;border:0;border-bottom:1px solid var(--border);background:none;text-align:left;cursor:pointer;width:100%}
 .mrow:last-child{border-bottom:0}
 .mrow:hover{background:var(--hover)}
 .mrow.sel{background:var(--brand-subtle)}
 .mrow .mm{flex:1;min-width:0}
-.mrow .mm b{display:block;font-size:13px;line-height:18px}
-.mrow .mm span{font-size:12px;color:var(--fg-3)}
-.mrow .val{font-variant-numeric:tabular-nums;text-align:right;font-size:13px;font-weight:600}
-.mrow .val small{display:block;font-weight:400;color:var(--fg-3);font-size:11px}
+.mrow .mm b{display:block;font-size:var(--fs-13);line-height:18px}
+.mrow .mm span{display:block;font-size:var(--fs-12);line-height:16px;color:var(--fg-3)}
+.mrow .val{font-variant-numeric:tabular-nums;text-align:right;font-size:var(--fs-13);font-weight:600}
+.mrow .val small{display:block;font-weight:400;color:var(--fg-3);font-size:var(--fs-12)}
 .mrow .val.bad{color:var(--danger)}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.note{display:flex;gap:10px;padding:10px 12px;border-radius:10px;background:var(--surface-2);font-size:13px;line-height:18px;color:var(--fg-2)}
+.actions{display:flex;gap:var(--sp-2);flex-wrap:wrap}
+.note{display:flex;gap:var(--sp-3);padding:var(--sp-3);border-radius:var(--r);background:var(--surface-2);font-size:var(--fs-13);line-height:18px;color:var(--fg-2);margin:0}
 .note .ic{margin-top:1px}
 .note.warn{background:var(--warn-subtle)} .note.bad{background:var(--danger-subtle)}
-.ticket{font-family:ui-monospace,Consolas,monospace;font-size:12px;line-height:17px;background:repeating-linear-gradient(var(--surface-2),var(--surface-2) 16px,var(--surface) 16px,var(--surface) 17px);border:1px dashed var(--border-strong);border-radius:8px;padding:10px 12px}
-.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.sum button{border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:10px;text-align:left;cursor:pointer}
+.fine{font-size:var(--fs-12);line-height:16px;color:var(--fg-3);margin:0}
+.ticket{font-family:ui-monospace,Consolas,monospace;font-size:var(--fs-12);line-height:17px;background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:var(--r);padding:var(--sp-3)}
+.sum{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-2)}
+.sum button{display:flex;flex-direction:column;gap:var(--sp-1);border:1px solid var(--border);border-radius:var(--r);background:var(--surface);padding:var(--sp-3);text-align:left;cursor:pointer}
 .sum button:hover{border-color:var(--border-strong)}
-.sum b{display:block;font-size:22px;line-height:28px}
-.sum span{font-size:12px;color:var(--fg-3)}
-.sum .bad b{color:var(--danger)}
-.sum button.on{border-color:var(--danger);box-shadow:0 0 0 1px var(--danger)}
+.sum .sum-l{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-12);line-height:16px;color:var(--fg-2);font-weight:500}
+.sum .sum-l .ic{width:14px;height:14px}
+.sum b{margin-top:auto;font-size:var(--fs-20);line-height:28px;font-variant-numeric:tabular-nums}
+.sum .bad b,.sum .bad .sum-l{color:var(--danger)}
+.sum button.on{border-color:var(--fg-2);box-shadow:0 0 0 1px var(--fg-2)}
+.sum button.bad.on{border-color:var(--danger);box-shadow:0 0 0 1px var(--danger)}
 .linkbtn{border:0;background:none;padding:0;color:var(--brand);font-weight:600;cursor:pointer;text-decoration:underline}
-.live{min-height:0}
-.si{display:block;flex:none}
 
 /* ---- abertura (≤ 5 s) ---- */
 .intro{display:none}
@@ -161,14 +115,14 @@ button.pill:hover{background:#fff;transform:translateX(-2px)}
 @keyframes grain{0%{transform:translate(0,0)}33%{transform:translate(-31px,17px)}66%{transform:translate(23px,-29px)}}
 .in-words{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .tk{position:absolute;left:0;top:0;white-space:nowrap;opacity:0;will-change:transform,opacity}
-.tk-t{font:600 14px/1 Inter,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#a6cbb9}
-.tk-n{font:500 30px/1 "JetBrains Mono",ui-monospace,Consolas,monospace;color:#FFC14D;letter-spacing:-.02em;text-shadow:0 0 18px rgba(255,170,40,.35)}
-.tk-m{font:500 13px/1 "JetBrains Mono",ui-monospace,Consolas,monospace;color:#E6ECE8;border:1px solid rgba(230,236,232,.32);padding:6px 9px;border-radius:4px;letter-spacing:.04em}
-.in-bar{position:absolute;left:0;right:0;height:max(9vh,46px);background:#000;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,32px);font:500 11px/1 "JetBrains Mono",ui-monospace,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase;color:#6f8a7d;transition:transform .75s cubic-bezier(.7,0,.2,1)}
+.tk-t{font:600 14px/1 Inter,sans-serif;color:#a6cbb9}
+.tk-n{font:600 32px/1 Inter,sans-serif;font-variant-numeric:tabular-nums;color:#FFC14D;letter-spacing:-.02em;text-shadow:0 0 18px rgba(255,170,40,.35)}
+.tk-m{font:500 13px/1 ui-monospace,Consolas,monospace;color:#E6ECE8;border:1px solid rgba(230,236,232,.32);padding:var(--sp-2);border-radius:var(--r-sm)}
+.in-bar{position:absolute;left:0;right:0;height:max(9vh,46px);background:#000;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,32px);font:500 13px/1 Inter,sans-serif;font-variant-numeric:tabular-nums;color:#9fb5aa;transition:transform .75s cubic-bezier(.7,0,.2,1)}
 .in-bar.top{top:0}.in-bar.bot{bottom:0}
-.in-bar ilab-logo{font-size:17px;margin-right:4px;vertical-align:-1px;font-family:Inter,sans-serif;letter-spacing:-.04em;text-transform:none}
+.in-bar ilab-logo{font-size:17px;margin-right:var(--sp-1);vertical-align:-1px}
 .intro.out .in-bar.top{transform:translateY(-100%)}.intro.out .in-bar.bot{transform:translateY(100%)}
-.in-skip{font:inherit;letter-spacing:inherit;text-transform:inherit;color:#d8e4de;background:none;border:1px solid rgba(216,228,222,.3);border-radius:999px;height:30px;padding:0 14px;cursor:pointer}
+.in-skip{font:inherit;color:#d8e4de;background:none;border:1px solid rgba(216,228,222,.45);border-radius:var(--r-pill);height:var(--h-sm);padding:0 var(--sp-4);cursor:pointer}
 .in-skip:hover{background:rgba(255,255,255,.08)}
 .in-brand{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;pointer-events:none;transition:transform .7s cubic-bezier(.5,0,.2,1),opacity .5s}
 .in-brand ilab-logo{font-size:clamp(68px,14vw,140px);color:#F2F6F3}
@@ -179,17 +133,22 @@ button.pill:hover{background:#fff;transform:translateX(-2px)}
 .in-brand.on ilab-logo>span:nth-child(2){transition-delay:.05s}
 .in-brand.on ilab-logo>span:last-child{transition-delay:.1s}
 .in-brand.a ilab-logo .lg-a{opacity:1}
-.in-brand p{margin:0;font:500 clamp(11px,1.4vw,14px)/1 Inter,sans-serif;letter-spacing:.6em;text-transform:uppercase;color:#9fb5aa;opacity:0;transition:opacity .6s .25s,letter-spacing 1.4s .2s cubic-bezier(.16,.9,.2,1)}
-.in-brand.on p{opacity:1;letter-spacing:.3em}
+.in-brand p{margin:0;font:500 clamp(14px,1.4vw,16px)/1 Inter,sans-serif;color:#9fb5aa;opacity:0;transition:opacity .6s .25s}
+.in-brand.on p{opacity:1}
 .intro.out .in-brand{transform:scale(1.08);opacity:0}
 @media (prefers-reduced-motion:reduce){.in-grain{animation:none}}
 @media (max-width:900px){
-  .lab{grid-template-columns:1fr;grid-template-rows:62vh auto}
-  .panel{border-left:0;border-top:1px solid var(--border)}
-  .top .seg,.top .hide-sm{display:none}
-  .legend{width:auto;right:14px}
+  .lab{grid-template-columns:1fr;grid-template-rows:min(62vh,72vw) auto;overflow-y:auto}
+  .panel{border-left:0;border-top:1px solid var(--border);overflow:visible}
+  .top .hide-sm{display:none}
+  .legend{width:auto;right:var(--sp-3);max-height:calc(100% - 64px);overflow:auto}
 }
-@media (max-width:520px){.ttl span{display:none}.hud .label{display:none}.crumb{right:110px}.crumb .esc{display:none}.lab{grid-template-rows:48vh auto}}
+@media (max-width:520px){
+  .ttl span{display:none}.hud .label{display:none}.crumb{right:64px}.crumb .esc{display:none}
+  .lab{grid-template-rows:min(48vh,92vw) auto}
+  .top{gap:var(--sp-3);padding:0 var(--sp-3)}
+  .hud .btn{min-height:var(--h-sm);min-width:var(--h-sm);padding:0 var(--sp-2)}
+}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.147.0/examples/jsm/"}}</script>
 </head>
@@ -207,19 +166,18 @@ button.pill:hover{background:#fff;transform:translateX(-2px)}
   <div class="in-bar bot"><span id="inCount">00 amostras · 00 ensaios</span><span id="inTc">00:00:00</span></div>
 </div>
 <header class="top">
-  <a class="brand" href="index.html#/inicio" title="Minhas consultas"><ilab-logo aria-label="iLAB"></ilab-logo></a>
+  <a class="brand" href="index.html#/inicio" title="Minhas consultas" aria-label="iLab, ir para Minhas consultas"><ilab-logo aria-label="iLab"></ilab-logo></a>
   <div class="ttl"><b>Bancada 3D</b><span>Laboratório 275 · RECAP · amostras de hoje</span></div>
   <span class="sp"></span>
-  <div class="seg" id="filters" role="group" aria-label="Destacar amostras"></div>
-  <a class="btn btn-sm hide-sm" href="index.html#/consultas">Minhas consultas</a>
-  <a class="btn btn-sm" href="index.html#/status">Guia de status</a>
+  <a class="btn btn-sm hide-sm" href="index.html#/consultas" data-ic="list">Minhas consultas</a>
+  <a class="btn btn-sm" href="index.html#/status" data-ic="palette">Guia de status</a>
 </header>
 <main class="lab">
-  <div class="stage" id="stage">
+  <div class="stage" id="stage" role="group" aria-label="Bancada 3D. Os mesmos itens estão na lista ao lado.">
     <div class="loading" id="loading">Montando a bancada…</div>
     <div class="crumb" id="crumb"></div>
     <div class="hud">
-      <button class="btn btn-sm" id="btnLegend" aria-pressed="false"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01" stroke-width="2.6"/></svg><span class="label">Legenda</span></button>
+      <button class="btn btn-sm" id="btnLegend" aria-pressed="false" aria-label="Legenda" data-ic="info"><span class="label">Legenda</span></button>
     </div>
     <div class="tip" id="tip" hidden></div>
     <div class="legend" id="legend" hidden></div>
@@ -242,15 +200,8 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fmtN = (v, d) => v.toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
-const P = {
-  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>', alert: '<path d="M12 4 2.8 19.5h18.4z"/><path d="M12 10v4"/><path d="M12 17h.01" stroke-width="2.6"/>',
-  help: '<circle cx="12" cy="12" r="9"/><path d="M9.6 9.2a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .9-1 1.5v.5"/><path d="M12 17h.01" stroke-width="2.6"/>',
-  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', play: '<path d="M7 5.5v13l11-6.5z"/>', right: '<path d="M5 12h14m0 0-6-6m6 6-6 6"/>',
-  left: '<path d="M19 12H5m0 0 6-6m-6 6 6 6"/>', stir: '<path d="M7 3l10 18"/><path d="M5 15c2 2 4 2 7 0s5-2 7 0"/>', refresh: '<path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/>',
-  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>', ban: '<circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01" stroke-width="2.6"/>',
-  list: '<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01" stroke-width="3"/>', ext: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>'
-};
-const icon = n => `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${P[n]}</svg>`;
+const icon = window.icon;
+document.querySelectorAll('[data-ic]').forEach(e => e.insertAdjacentHTML('afterbegin', icon(e.dataset.ic)));
 
 /* ============ dados ============ */
 function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -745,61 +696,60 @@ wash.add(wb, wcap, wtube, contact(1.1)); scene.add(wash);
 
 /* ============ estado da interface ============ */
 let sel = null, focusSample = samples.find(s => s.etapa === 'entrada'), filtro = 'todas', hover = null;
-const FILTROS = [['todas', 'Todas'], ['fora', 'Fora de especificação'], ['aguardando', 'Aguardando'], ['autorizadas', 'Autorizadas']];
-const passa = s => filtro === 'todas' || (filtro === 'fora' && specAmostra(s) === 'fora') || (filtro === 'aguardando' && ['disponivel', 'entrada', 'entrados'].includes(s.etapa)) || (filtro === 'autorizadas' && s.etapa === 'autorizada');
-function renderFilters() {
-  $('#filters').innerHTML = FILTROS.map(([k, l]) => `<button class="${filtro === k ? 'on' : ''}" aria-pressed="${filtro === k}" data-f="${k}">${l}<span class="n">${samples.filter(s => { const f0 = filtro; filtro = k; const r = passa(s); filtro = f0; return r; }).length}</span></button>`).join('');
-}
+// cada amostra cai em uma só categoria, então os quatro números somam o total
+const CATEGORIAS = [['fora', 'Fora de especificação', 'alert'], ['aguardando', 'Aguardando', 'clock'], ['concluidas', 'Concluídas', 'bottle'], ['autorizadas', 'Autorizadas', 'check']];
+const categoria = s => specAmostra(s) === 'fora' ? 'fora' : s.etapa === 'autorizada' ? 'autorizadas' : s.etapa === 'concluida' ? 'concluidas' : 'aguardando';
+const gravidade = s => ({ fora: 0, aguardando: 1, concluidas: 2, autorizadas: specAmostra(s) === 'sem' ? 3 : 4 })[categoria(s)];
+const passa = s => filtro === 'todas' || categoria(s) === filtro;
 function updateFades() {
   bottles.forEach(o => { const f = passa(o.s) ? 1 : .18; o.fadeT = sel?.kind === 'sample' && sel !== o ? Math.min(f, .4) : f; });
 }
-function setFiltro(f) { filtro = f; renderFilters(); updateFades(); if (!sel) renderPanel(); }
-$('#filters').addEventListener('click', e => { const b = e.target.closest('[data-f]'); if (b) setFiltro(b.dataset.f); });
+function setFiltro(f) { filtro = f; updateFades(); if (!sel) renderPanel(); }
 $('#legend').innerHTML = `<h3>Como ler a bancada</h3><ul>
   <li>${svgFrasco('bottle', ETAPA.entrados, null, 26)}<span><b>Nível do líquido</b> = etapa da amostra ou do ensaio</span></li>
   <li>${svgFrasco('bottle', ETAPA.autorizada, null, 26)}<span><b>Tampa preta / rolha</b> = resultados autorizados</span></li>
-  <li>${svgFrasco('bottle', ETAPA.concluida, 'fora', 26)}<span><b>Marca acima do frasco</b> = especificação (✓ conforme, ! fora, ? sem especificação)</span></li>
-  <li><span class="led" style="background:#22c55e"></span><span class="led" style="background:#3b82f6;margin-left:-4px"></span><span class="led" style="background:#f59e0b;margin-left:-4px"></span><span class="led" style="background:#ef4444;margin-left:-4px"></span><span><b>Luz do equipamento</b> = disponível, ocupado, em edição, fora de uso</span></li>
+  <li>${svgFrasco('bottle', ETAPA.concluida, 'fora', 26)}<span><b>Marca acima do frasco</b> = conforme, fora ou sem especificação</span></li>
+  <li><span class="leds"><span class="led" style="background:#22c55e"></span><span class="led" style="background:#3b82f6"></span><span class="led" style="background:#f59e0b"></span><span class="led" style="background:#ef4444"></span></span><span><b>Luz do equipamento</b> = disponível, ocupado, em edição, fora de uso</span></li>
   <li>${svgFrasco('flask', MET.transito, null, 26)}<span><b>Marca azul com seta</b> = resultado a caminho do LIMS</span></li></ul>
   <a href="index.html#/status">Ver o Guia de status completo</a>`;
 $('#btnLegend').addEventListener('click', e => { const l = $('#legend'); l.hidden = !l.hidden; e.currentTarget.setAttribute('aria-pressed', !l.hidden); });
 
 const PANEL = $('#panel');
-const closeBtn = `<button class="btn btn-sm" data-act="home" title="Voltar à visão geral (Esc)"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>Visão geral</button>`;
+const closeBtn = `<button class="btn btn-sm" data-act="home" title="Voltar à visão geral (Esc)">${icon('left')}Visão geral</button>`;
 function steps(cur, list, labels) { const i = list.indexOf(cur); return `<div class="steps">${list.map((_, k) => `<i class="${k <= i ? 'on' : ''}"></i>`).join('')}</div><div class="steps-l"><span>${labels[0]}</span><span>${labels[1]}</span></div>`; }
 function panelList() {
-  const n = { fora: samples.filter(s => specAmostra(s) === 'fora').length, ag: samples.filter(s => ['disponivel', 'entrada', 'entrados'].includes(s.etapa)).length, au: samples.filter(s => s.etapa === 'autorizada').length };
-  const lista = samples.filter(passa);
-  return `<div class="p-head"><div class="eyebrow">Visão geral</div><h2 style="font-size:20px">Amostras de hoje</h2><p style="color:var(--fg-3);font-size:13px;margin-top:2px">Clique em um frasco, em um equipamento ou no computador para aproximar e ver os detalhes.</p></div>
-  <div class="p-body"><div class="sum"><button class="bad ${filtro === 'fora' ? 'on' : ''}" data-filtro="${filtro === 'fora' ? 'todas' : 'fora'}"><b>${n.fora}</b><span>Fora de especificação</span></button><button data-filtro="${filtro === 'aguardando' ? 'todas' : 'aguardando'}"><b>${n.ag}</b><span>Aguardando</span></button><button data-filtro="${filtro === 'autorizadas' ? 'todas' : 'autorizadas'}"><b>${n.au}</b><span>Autorizadas</span></button></div>
+  const contar = k => samples.filter(s => categoria(s) === k).length;
+  const lista = samples.filter(passa).sort((a, b) => gravidade(a) - gravidade(b));
+  return `<div class="p-head"><h2>Amostras de hoje</h2><p class="p-sub">${samples.length} amostras e ${samples.length * ENS.length} ensaios. Selecione um frasco, um equipamento ou o computador para ver os detalhes.</p></div>
+  <div class="p-body"><div class="sum" role="group" aria-label="Filtrar amostras">${CATEGORIAS.map(([k, l, ic]) => `<button class="${k === 'fora' ? 'bad ' : ''}${filtro === k ? 'on' : ''}" aria-pressed="${filtro === k}" data-filtro="${filtro === k ? 'todas' : k}"><span class="sum-l">${icon(ic)}${l}</span><b>${contar(k)}</b></button>`).join('')}</div>
   ${filtro !== 'todas' ? `<p class="note">${icon('info')}<span>Mostrando ${lista.length} de ${samples.length}. <button class="linkbtn" data-filtro="todas">Ver todas</button></span></p>` : ''}
   <div class="mlist">${lista.map(s => { const sp = specAmostra(s); return `<button class="mrow" data-sample="${s.i}">${svgFrasco('bottle', ETAPA[s.etapa], sp, 30)}<span class="mm"><b>${s.id} · ${esc(PROD[s.p].n)}</b><span>${ETAPA[s.etapa].n}${sp ? ' · ' + SPEC[sp].txt : ''}</span></span></button>`; }).join('')}</div>
   <div class="mlist"><button class="mrow" data-lims="1"><span class="mm"><b>Computador do LIMS</b><span>Fila de resultados vindos do triLAB</span></span>${icon('right')}</button>${Object.values(eqObjs).map(o => `<button class="mrow" data-equip="${o.k}"><span class="mm"><b>${EQ[o.k].n}</b><span>${EQ[o.k].m}</span></span>${eqBadge(EQ[o.k].st)}</button>`).join('')}</div></div>`;
 }
 function panelSample(s) {
   const sp = specAmostra(s), ms = metodos(s), e = ETAPA[s.etapa], next = ETAPAS[ETAPAS.indexOf(s.etapa) + 1];
-  return `<div class="p-head"><div class="eyebrow">Amostra ${closeBtn}</div>
+  return `<div class="p-head"><div class="p-bar">Amostra ${closeBtn}</div>
     <div class="p-title">${svgFrasco('bottle', e, sp, 48)}<div><h2>${s.id}</h2><p>${PROD[s.p].cod} · ${esc(PROD[s.p].n)}</p></div></div>
     <div class="chips"><span class="st st-neutral">${e.n}</span>${specBadge(sp)}</div></div>
   <div class="p-body">
     <div class="sec"><h3>Etapa</h3>${steps(s.etapa, ETAPAS, ['Disponível', 'Autorizada'])}</div>
     <dl class="kv"><dt>Coletada</dt><dd>Hoje, ${s.hora}</dd><dt>Local</dt><dd>${esc(s.local)}</dd><dt>Estante</dt><dd>A · ${s.i < 6 ? 'fileira de trás' : 'fileira da frente'}, posição ${s.i % 6 + 1}</dd></dl>
-    <div class="sec"><h3>Ensaios <span style="text-transform:none;letter-spacing:0;font-weight:400">· também na bandeja do centro</span></h3><div class="mlist">${ms.map(m => `<button class="mrow" data-method="${m.i}">${svgFrasco('flask', MET[m.st], m.spec, 30)}<span class="mm"><b>${m.e.curto}</b><span>${m.e.m} · ${MET[m.st].n}</span></span><span class="val ${m.spec === 'fora' ? 'bad' : ''}">${m.v != null ? `${fmtN(m.v, m.e.dec)}<small>${m.e.u} · ${specTxt(m.e)}</small>` : '<small>—</small>'}</span></button>`).join('')}</div></div>
+    <div class="sec"><h3>Ensaios <span>· também na bandeja do centro</span></h3><div class="mlist">${ms.map(m => `<button class="mrow" data-method="${m.i}">${svgFrasco('flask', MET[m.st], m.spec, 30)}<span class="mm"><b>${m.e.curto}</b><span>${m.e.m} · ${MET[m.st].n}</span></span><span class="val ${m.spec === 'fora' ? 'bad' : ''}">${m.v != null ? `${fmtN(m.v, m.e.dec)}<small>${m.e.u} · ${specTxt(m.e)}</small>` : '<small>—</small>'}</span></button>`).join('')}</div></div>
     ${sp === 'fora' ? `<p class="note bad">${icon('alert')}<span>Pelo menos um ensaio ficou fora da especificação. Confira antes de autorizar.</span></p>` : ''}
     ${s.sem ? `<p class="note">${icon('help')}<span>Este cliente não tem especificação cadastrada para o produto. Os resultados foram anotados e autorizados sem comparação.</span></p>` : ''}
     ${PROD[s.p].volatil ? `<p class="note">${icon('info')}<span>Amostra volátil: manter o frasco resfriado a 0–1 °C e sem encher até a boca (ASTM D5842).</span></p>` : ''}
-    <p style="font-size:12px;color:var(--fg-3)">Limites: ${PROD[s.p].res}${s.sem ? ' (não aplicados)' : ''}. "Anotar" = sem limite na tabela.</p>
+    <p class="fine">Limites: ${PROD[s.p].res}${s.sem ? ' (não aplicados)' : ''}. "Anotar" = sem limite na tabela.</p>
     <div class="actions">${next ? `<button class="btn btn-primary" data-act="next">${icon('play')}Simular: ${ETAPA[next].n}</button>` : ''}<button class="btn" data-act="reset">${icon('refresh')}Recomeçar</button></div>
   </div>`;
 }
 function panelMethod(o) {
   const m = o.m, st = MET[m.st], eq = EQ[m.e.eq];
-  return `<div class="p-head"><div class="eyebrow">Ensaio ${closeBtn}</div>
+  return `<div class="p-head"><div class="p-bar">Ensaio ${closeBtn}</div>
     <div class="p-title">${svgFrasco('flask', st, m.spec, 48)}<div><h2>${m.e.curto}</h2><p>${m.e.n} · ${m.e.m}</p></div></div>
     <div class="chips"><span class="st st-neutral">${st.n}</span>${specBadge(m.spec)}</div></div>
   <div class="p-body">
     <div class="mlist"><button class="mrow" data-sample="${focusSample.i}">${svgFrasco('bottle', ETAPA[focusSample.etapa], specAmostra(focusSample), 30)}<span class="mm"><b>Amostra ${focusSample.id}</b><span>${esc(PROD[focusSample.p].n)}</span></span>${icon('right')}</button></div>
-    <div class="sec"><h3>Etapa do ensaio</h3>${steps(m.st, ['disponivel', 'analise', 'transito', 'entrados', 'autorizado'], ['Disponível', 'Autorizado'])}<p style="font-size:13px;color:var(--fg-2);margin-top:8px">${st.d}.</p></div>
+    <div class="sec"><h3>Etapa do ensaio</h3>${steps(m.st, ['disponivel', 'analise', 'transito', 'entrados', 'autorizado'], ['Disponível', 'Autorizado'])}<p class="steps-t">${st.d}.</p></div>
     <dl class="kv"><dt>Resultado</dt><dd>${m.v != null ? `${fmtN(m.v, m.e.dec)} ${m.e.u}` : 'Ainda sem valor'}</dd><dt>Especificação</dt><dd>${specTxt(m.e)}${anotar(m.e) ? '' : ' ' + m.e.u}</dd></dl>
     <div class="sec"><h3>Equipamento</h3><div class="mlist"><button class="mrow" data-equip="${m.e.eq}"><span class="mm"><b>${eq.n}</b><span>${esc(eq.det)}</span></span>${eqBadge(eq.st)}</button></div></div>
     ${st.seta ? `<div class="mlist"><button class="mrow" data-lims="1"><span class="mm"><b>Ver no computador do LIMS</b><span>O resultado aprovado no triLAB está sendo enviado</span></span>${icon('right')}</button></div>` : ''}
@@ -808,7 +758,7 @@ function panelMethod(o) {
 }
 function panelEquip(o) {
   const eq = EQ[o.k], s = EQST[eq.st];
-  return `<div class="p-head"><div class="eyebrow">Equipamento ${closeBtn}</div>
+  return `<div class="p-head"><div class="p-bar">Equipamento ${closeBtn}</div>
     <div class="p-title"><div><h2>${eq.n}</h2><p>Método ${eq.m}</p></div></div>
     <div class="chips">${eqBadge(eq.st)}${eq.fin ? `<span class="tag">${icon('check')}Resultado finalizado</span>` : ''}</div></div>
   <div class="p-body">
@@ -820,12 +770,12 @@ function panelEquip(o) {
 function panelLims() {
   const tr = filaLims();
   const aut = samples.filter(s => s.etapa === 'autorizada');
-  return `<div class="p-head"><div class="eyebrow">Computador ${closeBtn}</div>
+  return `<div class="p-head"><div class="p-bar">Computador ${closeBtn}</div>
     <div class="p-title"><div><h2>LabWare LIMS</h2><p>Sistema de gestão do laboratório</p></div></div>
     <div class="chips">${tr.length ? `<span class="st st-info">${icon('right')}Recebendo ${tr.length} do triLAB</span>` : `<span class="st st-neutral">Nenhum envio pendente</span>`}</div></div>
   <div class="p-body">
     <p class="note">${icon('info')}<span>Resultados aprovados no triLAB seguem para o LIMS. Enquanto isso, o Erlenmeyer do ensaio mostra a marca azul com seta.</span></p>
-    <div class="sec"><h3>Em trânsito</h3>${tr.length ? `<div class="mlist">${tr.map(({ s, m }) => `<button class="mrow" data-sample="${s.i}">${svgFrasco('flask', MET.transito, null, 30)}<span class="mm"><b>${m.e.curto}</b><span>Amostra ${s.id} · ${m.e.m}</span></span><span class="val">${fmtN(m.v, m.e.dec)}<small>${m.e.u}</small></span></button>`).join('')}</div>` : '<p style="font-size:13px;color:var(--fg-3)">Nada a caminho agora.</p>'}</div>
+    <div class="sec"><h3>Em trânsito</h3>${tr.length ? `<div class="mlist">${tr.map(({ s, m }) => `<button class="mrow" data-sample="${s.i}">${svgFrasco('flask', MET.transito, null, 30)}<span class="mm"><b>${m.e.curto}</b><span>Amostra ${s.id} · ${m.e.m}</span></span><span class="val">${fmtN(m.v, m.e.dec)}<small>${m.e.u}</small></span></button>`).join('')}</div>` : '<p class="fine">Nada a caminho agora.</p>'}</div>
     <div class="sec"><h3>Autorizadas hoje · ${aut.length}</h3><div class="mlist">${aut.map(s => { const sp = specAmostra(s); return `<button class="mrow" data-sample="${s.i}">${svgFrasco('bottle', ETAPA[s.etapa], sp, 30)}<span class="mm"><b>${s.id}</b><span>${esc(PROD[s.p].n)}</span></span>${specBadge(sp)}</button>`; }).join('')}</div></div>
   </div>`;
 }
@@ -836,8 +786,8 @@ function renderPanel() {
 const NOME = o => o.kind === 'sample' ? `Amostra ${o.s.id}` : o.kind === 'method' ? `Ensaio ${o.e.curto}` : o.kind === 'lims' ? 'Computador do LIMS' : EQ[o.k].n;
 function renderCrumb() {
   $('#crumb').innerHTML = !sel
-    ? `<button class="pill" data-home title="Recentralizar"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Visão geral</button><span class="esc">Clique em um item para aproximar · arraste para girar</span>`
-    : `<button class="pill" data-home>${icon('left')}Visão geral</button><span class="sep">›</span><span class="pill cur">${esc(NOME(sel))}</span><span class="esc"><kbd>Esc</kbd> ou role para trás para voltar</span>`;
+    ? `<button class="pill" data-home title="Recentralizar">${icon('frame')}Visão geral</button><span class="esc">Clique em um item para aproximar · arraste para girar</span>`
+    : `<button class="pill" data-home>${icon('left')}Visão geral</button><span class="sep">${icon('chevron-right')}</span><span class="pill cur">${esc(NOME(sel))}</span><span class="esc"><kbd>Esc</kbd> ou role para trás para voltar</span>`;
 }
 $('#crumb').addEventListener('click', e => { if (e.target.closest('[data-home]')) open(null); });
 
@@ -898,9 +848,9 @@ PANEL.addEventListener('click', e => {
   else if (d.act === 'next') {
     const s = sel.s; s.etapa = ETAPAS[ETAPAS.indexOf(s.etapa) + 1];
     const o = bottles.find(b => b.s === s); applySampleState(o); if (s.etapa === 'autorizada') o.capPop = 1;
-    showMethods(s); renderPanel(); renderFilters();
+    showMethods(s); renderPanel();
   }
-  else if (d.act === 'reset') { const s = sel.s; s.etapa = 'disponivel'; const o = bottles.find(b => b.s === s); applySampleState(o); showMethods(s); renderPanel(); renderFilters(); }
+  else if (d.act === 'reset') { const s = sel.s; s.etapa = 'disponivel'; const o = bottles.find(b => b.s === s); applySampleState(o); showMethods(s); renderPanel(); }
   else if (d.act === 'stir') { sel.userStir = !sel.userStir; sel.stir = sel.m.st === 'analise' || sel.userStir; sel.vortT = sel.stir ? .14 : 0; sel.rodG.visible = sel.stir; if (sel.stir && sel.H < .3) sel.HT = Math.max(sel.HT, hFromMl(90)); renderPanel(); }
   else if (d.act === 'eqnext') { const eq = EQ[sel.k]; eq.st = EQ_ORDEM[(EQ_ORDEM.indexOf(eq.st) + 1) % 4]; eq.det = { disponivel: 'Amostra de controle do dia dentro da carta (ASTM D6299). Pronto para a próxima amostra.', ocupado: `Analisando a amostra ${focusSample.id}. Livre às 14:30.`, edicao: 'Ajuste de método em andamento.', fora: 'Amostra de controle fora da carta de controle (ASTM D6299). Chamado 4521 aberto.' }[eq.st]; applyEquip(sel); renderPanel(); }
   else if (d.act === 'eqfin') { const eq = EQ[sel.k]; eq.fin = !eq.fin; applyEquip(sel); renderPanel(); }
@@ -918,7 +868,7 @@ function pick(ev) {
   return hit?.object.userData.pick || null;
 }
 function tipHtml(o) {
-  const acao = o === sel ? '' : '<i style="display:block;opacity:.7;font-style:normal;margin-top:2px">Clique para aproximar</i>';
+  const acao = o === sel ? '' : '<i class="acao">Clique para aproximar</i>';
   if (o.kind === 'sample') { const sp = specAmostra(o.s); return `<b>${o.s.id} · ${esc(PROD[o.s.p].n)}</b>${ETAPA[o.s.etapa].n}${sp ? ' · ' + SPEC[sp].txt : ''}${acao}`; }
   if (o.kind === 'method') return `<b>${o.e.m} · ${o.e.curto}</b>${MET[o.m.st].n}${o.m.v != null ? ` · ${fmtN(o.m.v, o.e.dec)} ${o.e.u}` : ''}${acao}`;
   if (o.kind === 'lims') return `<b>Computador do LIMS</b>Fila de resultados do triLAB${acao}`;
@@ -950,6 +900,11 @@ function resize() {
   renderer.setSize(w, h, false); camera.aspect = w / h; camera.fov = w / h < 1 ? 46 : 32; camera.updateProjectionMatrix();
   const hf = Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect);
   homeDist = THREE.MathUtils.clamp(11.9 / Math.tan(hf), 12, 44);
+  // no celular a bancada é limitada pela largura: centraliza no palco e aumenta os marcadores
+  const estreito = w < 560, km = estreito ? 1.5 : 1;
+  HOME.target.y = estreito ? 1.5 : 1.0;
+  bottles.forEach(o => o.mk.scale.set(.55 * km, .55 * km, 1));
+  flasks.forEach(o => o.mk.scale.set(.7 * km, .7 * km, 1));
   HOME.pos.copy(HOME.target).addScaledVector(HOME_DIR, homeDist);
   if (firstFit) { camera.position.copy(HOME.pos); controls.target.copy(HOME.target); firstFit = false; }
   if (!tween) { if (!sel) { camera.position.copy(HOME.pos); controls.target.copy(HOME.target); setLimits(homeDist); } else setLimits(viewOf(sel).dist); }
@@ -962,7 +917,7 @@ bottles.forEach(o => applySampleState(o, true));
 document.fonts.load('800 26px Inter').then(() => bottles.forEach(o => { const t = o.lab.material.map, { g, c } = t.userData; drawLabel(g, c.width, c.height, o.s); t.needsUpdate = true; }));
 showMethods(focusSample);
 flasks.forEach(o => { o.H = o.HT; rebuildFlask(o); });
-renderFilters(); select(null);
+select(null);
 $('#loading').hidden = true;
 
 /* ============ abertura cinematográfica (≤ 5 s) ============ */

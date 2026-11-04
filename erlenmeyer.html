@@ -9,83 +9,58 @@
 <title>iLab · Laboratório livre</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
 <script src="logo.js"></script>
+<script src="icons.js"></script>
 <style>
 /* Área de testes: o Erlenmeyer 3D original, com palco à esquerda e controles à direita; empilha no celular */
-:root{
-  --bg:#F4F6F5; --stage:#FAFBFA; --panel:#FFFFFF; --hover:#EBF0ED; --ink:#16201B; --muted:#5F6B65; --line:#E1E6E3; --line-strong:#C5CEC9;
-  --brand:#0A7A4A; --brand-hover:#086640; --on-brand:#FFFFFF; --amber:#C8700F;
-  --mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
-  color-scheme:light;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E1311; --stage:#151C19; --panel:#151C19; --hover:#1F2925; --ink:#E6ECE8; --muted:#97A39E; --line:#25302B; --line-strong:#34413B;
-  --brand:#3BBF7C; --brand-hover:#56CF90; --on-brand:#06170E; --amber:#F0A245; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0E1311; --stage:#151C19; --panel:#151C19; --hover:#1F2925; --ink:#E6ECE8; --muted:#97A39E; --line:#25302B; --line-strong:#34413B;
-  --brand:#3BBF7C; --brand-hover:#56CF90; --on-brand:#06170E; --amber:#F0A245; color-scheme:dark}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%}
-body{background:var(--bg);color:var(--ink);font:14px/20px Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-button{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-
-.top{height:60px;display:flex;align-items:center;gap:16px;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left));background:var(--panel);border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;color:var(--ink);text-decoration:none;padding:4px 14px 4px 0;border-right:1px solid var(--line)}
-.brand ilab-logo{font-size:26px}
-.ttl b{display:block;font-size:16px;line-height:20px;white-space:nowrap}
-.ttl span{font-size:12px;color:var(--muted)}
-.sp{flex:1}
-.lnk{display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--line-strong);background:var(--panel);color:var(--ink);font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap}
-.lnk:hover{background:var(--hover)}
-
-.wrap{max-width:1240px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-right)) 28px max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:16px}
-.lab{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:stretch}
-.stage{position:relative;min-width:0;height:min(76vh,700px);min-height:420px;background:var(--stage);border:1px solid var(--line);border-radius:14px;overflow:hidden;touch-action:none}
+:root{--stage:#FAFBFA}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--stage:#151C19}}
+:root[data-theme="dark"]{--stage:#151C19}
+html,body{min-height:100%}
+.wrap{max-width:1240px;margin:0 auto;padding:var(--sp-5) max(var(--sp-4),env(safe-area-inset-right)) var(--sp-8) max(var(--sp-4),env(safe-area-inset-left))}
+.lab{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:var(--sp-4);align-items:start}
+.stage{position:relative;min-width:0;height:min(76vh,700px);min-height:420px;background:var(--stage);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;touch-action:none}
 .stage canvas{display:block;width:100%;height:100%;cursor:grab}
 .stage canvas:active{cursor:grabbing}
-.readout{position:absolute;left:16px;bottom:14px;display:flex;flex-direction:column;font-family:var(--mono);pointer-events:none}
-.readout b{font-size:30px;line-height:34px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.readout span{font-size:12px;color:var(--muted)}
-.hint{position:absolute;right:14px;top:12px;font-size:12px;color:var(--muted);pointer-events:none}
+.readout{position:absolute;left:var(--sp-4);bottom:var(--sp-4);display:flex;flex-direction:column;pointer-events:none}
+.readout b{font-size:var(--fs-32);line-height:40px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.readout span{font-size:var(--fs-12);line-height:16px;color:var(--fg-3)}
+.hint{position:absolute;right:var(--sp-4);top:var(--sp-3);font-size:var(--fs-12);color:var(--fg-3);pointer-events:none}
 .loading[hidden]{display:none}
-.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:13px}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--fg-3);font-size:var(--fs-13)}
 
-.bench{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:22px;min-width:0}
-.group{display:flex;flex-direction:column;gap:10px}
-.label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
-.label output,.sw-name{color:var(--ink);font-variant-numeric:tabular-nums;text-transform:none;letter-spacing:0;font-size:13px}
-input[type=range]{width:100%;accent-color:var(--brand);height:28px;margin:0}
-.scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:-6px}
-.swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.sw{appearance:none;border:1px solid var(--line);background:transparent;border-radius:10px;padding:7px 0 6px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;color:var(--muted);font:500 10.5px/1.1 Inter,sans-serif}
+.bench{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp-5);display:flex;flex-direction:column;gap:var(--sp-5);min-width:0}
+.group{display:flex;flex-direction:column;gap:var(--sp-2)}
+.label{font-size:var(--fs-13);line-height:18px;font-weight:600;color:var(--fg-2);display:flex;justify-content:space-between;gap:var(--sp-2)}
+.label output,.sw-name{color:var(--fg);font-variant-numeric:tabular-nums;font-weight:600}
+input[type=range]{width:100%;accent-color:var(--brand);height:var(--h-sm);margin:0}
+.scale{display:flex;justify-content:space-between;font-size:var(--fs-12);line-height:16px;color:var(--fg-3);font-variant-numeric:tabular-nums;margin-top:calc(var(--sp-1) * -1)}
+.swatches{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--sp-1)}
+.sw{appearance:none;border:1px solid var(--border);background:transparent;border-radius:var(--r);padding:var(--sp-2) 0;display:flex;flex-direction:column;align-items:center;gap:var(--sp-1);cursor:pointer;color:var(--fg-3);font:500 12px/16px Inter,sans-serif;min-width:0}
 .sw i{display:block;width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
-.sw[aria-pressed="true"]{border-color:var(--brand);color:var(--ink);box-shadow:0 0 0 1px var(--brand)}
-.sw-desc{font-size:12.5px;line-height:17px;color:var(--muted);margin:0}
-.row{display:flex;flex-wrap:wrap;gap:8px}
-.btn{appearance:none;font-weight:600;font-size:13.5px;line-height:1;padding:11px 14px;border-radius:10px;border:1px solid var(--line-strong);background:transparent;color:var(--ink);cursor:pointer;flex:1 1 auto}
-.btn:hover{background:var(--hover)}
-.btn.primary{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
-.btn.primary:hover{background:var(--brand-hover)}
-.btn[aria-pressed="true"]:not(.primary){border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
-.note{font-size:12.5px;line-height:18px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin:auto 0 0}
+.sw[aria-pressed="true"]{border-color:var(--brand);color:var(--fg);box-shadow:0 0 0 1px var(--brand)}
+.sw-desc{font-size:var(--fs-13);line-height:18px;color:var(--fg-3);margin:0}
+.row{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+.row .btn{flex:1 1 auto;padding:0 var(--sp-3)}
+.note{font-size:var(--fs-12);line-height:16px;color:var(--fg-3);border-top:1px solid var(--border);padding-top:var(--sp-4);margin:0}
 
 @media (max-width:820px){
   .lab{grid-template-columns:minmax(0,1fr)}
   .stage{height:58vh;min-height:340px}
   .hint{display:none}
 }
-@media (max-width:560px){.ttl span,.lnk.hide-sm{display:none}}
+@media (max-width:560px){.ttl span,.hide-sm{display:none}.top{gap:var(--sp-3);padding:0 var(--sp-3)}}
 </style>
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="index.html#/inicio" title="Minhas consultas"><ilab-logo></ilab-logo></a>
-  <div class="ttl"><b>Laboratório livre</b><span>Área de testes · brinque com o Erlenmeyer</span></div>
+  <a class="brand" href="index.html#/inicio" title="Minhas consultas" aria-label="iLab, ir para Minhas consultas"><ilab-logo></ilab-logo></a>
+  <div class="ttl"><b>Laboratório livre</b><span>Área de testes com o Erlenmeyer 3D</span></div>
   <span class="sp"></span>
-  <a class="lnk hide-sm" href="index.html#/inicio">Minhas consultas</a>
-  <a class="lnk" href="bancada.html">Bancada 3D</a>
+  <a class="btn btn-sm hide-sm" href="index.html#/inicio" data-ic="list">Minhas consultas</a>
+  <a class="btn btn-sm" href="bancada.html" data-ic="box">Bancada 3D</a>
 </header>
 
 <main class="wrap">
@@ -112,20 +87,20 @@ input[type=range]{width:100%;accent-color:var(--brand);height:28px;margin:0}
       <div class="group">
         <div class="label">Bastão de vidro</div>
         <div class="row">
-          <button class="btn primary" id="stir" aria-pressed="false">Agitar</button>
-          <button class="btn" id="rodToggle" aria-pressed="true">Ocultar bastão</button>
+          <button class="btn btn-primary" id="stir" aria-pressed="false"></button>
+          <button class="btn" id="rodToggle"></button>
         </div>
       </div>
 
       <div class="group">
         <div class="label">Vista</div>
         <div class="row">
-          <button class="btn" id="spin" aria-pressed="true">Giro automático</button>
-          <button class="btn" id="reset">Centralizar</button>
+          <button class="btn" id="spin" aria-pressed="true" data-ic="rotate-3d">Giro automático</button>
+          <button class="btn" id="reset" data-ic="locate">Centralizar</button>
         </div>
       </div>
 
-      <p class="note">Frasco de Erlenmeyer de 250 mL com parede de vidro de espessura real e menisco na superfície. As cores são ilustrativas: servem para brincar, não para identificar amostras.</p>
+      <p class="note">Frasco de Erlenmeyer de 250 mL com parede de vidro de espessura real e menisco na superfície. As cores são ilustrativas e não identificam amostras.</p>
     </aside>
   </div>
 </main>
@@ -135,6 +110,7 @@ input[type=range]{width:100%;accent-color:var(--brand);height:28px;margin:0}
 <script>
 (function(){
 const stage = document.getElementById('stage');
+document.querySelectorAll('[data-ic]').forEach(e => e.insertAdjacentHTML('afterbegin', icon(e.dataset.ic)));
 if(!window.THREE){ document.getElementById('loading').textContent='Não foi possível carregar o 3D. Verifique a conexão com a internet.'; return; }
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -371,16 +347,17 @@ SOLUTIONS.forEach((s,i)=>{
 });
 
 let stirring = false;
+const rotular = (el, ic, txt) => { el.innerHTML = icon(ic) + txt; };
 const stirBtn = document.getElementById('stir'), rodToggle = document.getElementById('rodToggle');
+rotular(stirBtn, 'stir', 'Agitar'); rotular(rodToggle, 'eye-off', 'Ocultar bastão');
 stirBtn.addEventListener('click', ()=>{
   stirring = !stirring; vortTarget = stirring ? 0.16 : 0;
-  stirBtn.setAttribute('aria-pressed', stirring); stirBtn.textContent = stirring ? 'Parar' : 'Agitar';
+  stirBtn.setAttribute('aria-pressed', stirring); rotular(stirBtn, 'stir', stirring ? 'Parar' : 'Agitar');
   if(stirring && !rodGroup.visible) rodToggle.click();
 });
 rodToggle.addEventListener('click', ()=>{
   rodGroup.visible = !rodGroup.visible;
-  rodToggle.setAttribute('aria-pressed', rodGroup.visible);
-  rodToggle.textContent = rodGroup.visible ? 'Ocultar bastão' : 'Mostrar bastão';
+    rotular(rodToggle, rodGroup.visible ? 'eye-off' : 'eye', rodGroup.visible ? 'Ocultar bastão' : 'Mostrar bastão');
   if(!rodGroup.visible && stirring) stirBtn.click();
 });
 const spin = document.getElementById('spin');

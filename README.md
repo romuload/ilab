@@ -7,5 +7,7 @@ Protótipo do redesenho do iLab 3.0 (módulo Minhas Consultas), com Guia de stat
 - `erlenmeyer.html`: Laboratório livre, área de testes com o Erlenmeyer 3D (volume, líquido, bastão e agitação).
 - `case/`: case de portfólio em inglês (landing page com narrativa por scroll, GSAP). As imagens em `case/shots/` são capturas reais deste protótipo.
 - `logo.js`: logo iLAB (`<ilab-logo>`), com o "A" em forma de Erlenmeyer.
+- `tokens.css`: tokens (cor, espaço, fonte, raio, controles) e componentes compartilhados pelas três páginas. `app.css`: telas do `index.html`.
+- `icons.js`: ícones compartilhados (`icon(nome)`). Parte vem do Lucide, licença ISC em `ICONS-LICENSE.txt`.
 
 Todos os dados, amostras e e-mails são fictícios.
